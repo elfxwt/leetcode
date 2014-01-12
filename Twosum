@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int> &numbers, int target) {
+        int index1 = 0,index2 = 0;
+        multimap<int,int> data;
+		multimap<int,int>::iterator iter,leftIter;
+		vector<int> result;
+		for(int i = 0;i < numbers.size();i++)
+			data.insert(make_pair(numbers.at(i),i));
+		for(iter = data.begin();iter != data.end();iter++)
+		{
+			index1 = iter->second;
+			int left = target - iter->first;
+			leftIter = data.find(left);
+			if(leftIter != data.end()&& leftIter->second != index1)
+			{
+				index2 = leftIter->second;
+				break;
+			}
+		}
+		if(index1 > index2)
+			swap(index1,index2);
+		result.push_back(index1+1);
+		result.push_back(index2+1);
+		return result;
+}
+};
+//首先有个n平方复杂度的，现在是O(n)，利用multimap可达到目的，注意其中有重复元素，不过可以放心的是假设只有一个解，这道题另一个思路
+应该可以通过求中位数得到O（nlogn）的时间复杂度。递归？
