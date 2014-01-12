@@ -1,0 +1,34 @@
+//此题思路一开始只有O（m+n）的想法，想了半天的根堆实现，但是实现不了题目要求的复杂度，后来只能看答案了。。
+//谢谢题目作者
+
+double findMedianSortedArrays(int A[], int m, int B[], int n)
+{
+	int length = m + n;
+	if(length % 2 == 0)
+		return (findKey(A,m,B,n,length / 2) + findKey(A,m,B,n,length /2 + 1)) / 2;
+	else
+		return findKey(A,m,B,n,length /2 + 1);
+	
+}
+
+double findKey(int A[],int m,int B[],int n,int k)
+{
+	if(m > n)
+		return findKey(B,n,A,m,k);//保证前面是小数组
+	if(m == 0)
+		return B[k-1];
+	if(k == 1)
+		return min(A[0],B[0]); //迭代终止条件还是想的不太清楚。。
+
+	int pA = min(m,k/2),pB = k - pA;//这个条件也很重要。。
+
+	if(A[pA -1] < B[pB - 1])
+		return findKey(A + pA,m - pA,B,n,k-pA);
+	else if(A[pA - 1] > B[pB - 1])
+		return findKey(A,m,B + pB,n - pB,k-pB);
+	else if(A[pA - 1] == B[pB - 1])
+		return A[pA - 1];
+}
+
+//其实这道题目就是一个二分查找的思路，只不过是不是一个有序的数组，而是分开的两个有序数组，所以此时就需要判断跟比较，同时
+//附加很多条件才可以。。
