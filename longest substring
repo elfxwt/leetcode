@@ -1,0 +1,34 @@
+int lengthOfLongestSubstring(string s)
+{
+	int maxSize = 0;
+	map<char,int> value;
+	int index = 0;
+	int start = 0;
+	int i = 0;
+	int temp = s.size()-1;// 必须用一个temp来表示，否则不起作用
+	while(i <=temp)
+	{
+		if(value.count(s.at(i)) == 0)
+			{
+				value[s.at(i)] = i++;
+				index++;
+			}
+			else
+			{   // 重复元素出现的地方分三种情况讨论，每种情况都使得下一次开始的索引不同
+				if(maxSize < index)
+					maxSize = index;
+				if(s.at(start) == s.at(i))//这个是相等元素在整个字符串第一个，下标从第二个开始
+					start ++;
+				else
+					if(i - value[s.at(i)] == 1) // 相等元素在最末尾
+						start = i;
+					else
+						start = value[s.at(i)] + 1;
+				index = 0;
+				value.clear();
+				i =start;
+			}
+	}
+	return maxSize <index?index:maxSize;
+	
+}
