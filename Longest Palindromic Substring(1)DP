@@ -1,0 +1,27 @@
+ string longestPalindrome(string s) {
+		const size_t n = s.size();
+		bool **tag = new bool *[n];
+		for(int i = 0;i < n;i++)
+			tag[i] = new bool [n];
+
+		fill_n(&tag[0][0],n * n,false);//这里面的参数，只用 tag 是不是也可以呢。。不可以，必须是这样的。。
+		size_t maxLen = 1;
+		size_t start = 0;
+		for(size_t i = 0;i < n;i++)
+		{
+			tag[i][i] = true;
+			for(size_t j = 0;j < i;j++)
+			{				
+				tag[j][i] = (s[i]==s[j]&& (i - j)< 2 || tag[j+1][i -1]);// 这一步很关键
+				/*最后面的条件是否可以是是s[i-1] = s[j+1],
+				不可以，因为这样就没有了延续性，就不能从一开始就保证回文了*/
+				size_t midLen = i - j +1;
+				if(tag[j][i] && maxLen<midLen)
+				{
+					maxLen = midLen;
+					start = j;
+				}
+			}
+		}
+			return s.substr(start, maxLen);// substr(size_t pos = 0,size_t len = npos)      
+    }
