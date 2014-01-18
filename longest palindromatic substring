@@ -1,0 +1,52 @@
+// manacher's algorithm  数学技巧，及其下标的确认
+#define _min(a,b) (a < b? a : b);
+class Solution {
+	 
+public:
+	string preProcess(string s)
+	{
+		string tem = "^";
+		size_t len = s.size();
+		for(int i = 0;i < len;i++)
+			tem += "#" + s.substr(i,1);
+		tem += "#$";
+		return tem;
+	}
+    string longestPalindrome(string s) {
+		string res = preProcess(s);
+		
+		const size_t len = res.size();
+		int *a = new int [len];
+		size_t maxlen = 0;
+		size_t center = 0;
+		for(int i = 1;i < len - 1;i++)
+		{
+			int corr = 2 * center - i;
+			int minT = _min(a[corr],maxlen - i) ;
+			a[i] = maxlen > i? minT: 0;
+			cout<<a[i]<<endl;
+			while(res[i + a[i]+1] == res[i - a[i]-1])
+				a[i]++;
+			if(a[i] + i> maxlen)
+			{
+				maxlen = a[i] + i;
+				center = i;
+			}
+		}
+		int max = 0;
+		int reCenter = 0;
+		for(int j = 1;j < len-1;j++) // 这里很关键，如果是0 和len 就会超时 奇怪。。
+		{
+			if(a[j] > max)
+			{
+				max = a[j];
+				reCenter = j;
+			}
+		}
+		delete []a;
+		return s.substr((reCenter - max -1) / 2,max);//别忘记了是原来的回文串，现在记录的值都是包含#的
+	
+
+	
+    }
+};
