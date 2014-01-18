@@ -1,0 +1,35 @@
+// 一开始没有考虑负数，上来就想整数转字符串比较，想了一半才发现withou extra space 
+// 不过总体来说还是很快accepted 了
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+		int len = 0;
+		int tX = x;
+		while(tX)
+		{
+			tX /= 10;
+			len ++;
+		}
+		int midIndex = len  / 2;
+		
+		int postPart = 0;
+		int prePart = 0;
+		if(len % 2 == 0)
+			prePart = x / (int(pow(10,midIndex)));
+		else
+			prePart = x / (int(pow(10,midIndex+1)));
+		
+		for( int i = 0;i < midIndex ; i++)
+		{
+			postPart += (x % 10) * pow(10,midIndex - i -1);
+			x /= 10;
+		}
+		if (prePart == postPart)
+			return true;
+		else 
+			return false;
+
+        
+    }
+};  
