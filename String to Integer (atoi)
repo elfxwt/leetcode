@@ -1,0 +1,91 @@
+// I have to say this problem is pretty pretty bitch!!
+#define  INT_MAX 2147483647
+#define  INT_MIN -2147483648
+//没有考虑到空字符串的情况
+//没有考虑到字符串是以空的或者是以0开头的
+//没有考虑到数字中间还可能存在字母
+// +0a32 这种没有考虑到。。神啊。。
+/*
+Input:	"   - 321"
+Output:	-321
+Expected:	0
+*/
+//.. 这个题太贱了！
+class Solution {
+public:
+    int atoi(const char *str) {
+		int start = 0;
+		int len = 0;
+		int result = 0;
+		int firstZeroIndex = 0;
+		bool zeroTag = true;
+		int nonNumIndex = 0;
+		bool tag = false;
+		while(str[len] != '\0')
+				len++;
+		// 下面找第一个非0数字的下标，从此开始往下计算
+		int j = len;
+		while(j--)
+		{
+			if(str[start] == '-')
+				tag = true;	
+			else if(str[start] == '0' && zeroTag)
+			{
+				firstZeroIndex = start;//记录第一个0    0XXaXX3XX
+				zeroTag = false;
+			}
+			else if (str[start] < '0' || str[start] >'9')
+				nonNumIndex = start;// 非0 数字之前的非数字
+			else if(str[start] > '0' && str[start] <='9')// 这里记录非0数字出现的第一个
+				break;
+				start ++;					
+		}
+		
+
+		if(start == len||( nonNumIndex > firstZeroIndex && nonNumIndex < start&& !zeroTag))// 中间有字母的情况下且前半段为0
+			return 0;
+		bool midTag = false;
+		for(int i = start;i < len;i++)
+		{
+			if(str[i] >= '0'&& str[i] <= '9')
+			{
+				if(result == 2147483640 && str[i]> '7')
+				{
+					if(tag)
+						return INT_MIN;
+					else
+					return INT_MAX;
+				}
+				else
+					result += (str[i] - '0') * pow(10,(len -i - 1));
+			}
+			else
+			{
+				result /= pow(10,len - i);
+				break;
+			}
+				
+		}
+		if(tag)
+			result = 0 - result;
+		return result;
+
+    }
+};
+        
+
+
+int main()
+{
+	Solution test;
+	int t;
+
+	t = test.atoi("   321");
+	cout<<t<<endl;
+}
+
+
+
+
+ 
+
