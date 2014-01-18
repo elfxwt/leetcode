@@ -1,0 +1,31 @@
+//这个题目因为用了std 的函数，所以。。感觉蒙混过关了，因为对于 last digit is 0 的数据，是要判断最开始不为O，要实现其实
+//也容易实现的。。
+
+#include<string>
+#include<algorithm>
+class Solution {
+public:
+    int reverse(int x) {
+        string res(8,'0');//字符串的构造。。
+		int result = 0;
+		int i = 0;
+		if(x != 0)
+		{
+			if(x < 0)
+			{
+				res[0]='-';
+				i++;
+			}
+			x = abs(x);
+			while(x)
+			{
+				res[i++] = x % 10 + '0';//这里一开始也没写对
+				x /= 10;
+			}
+			res = res.substr(0,i);
+			result = atoi(res.c_str());
+		}
+		return result;
+
+    }
+};
