@@ -1,0 +1,80 @@
+//误区1： *的问题，是代表它前面的元素，所以如果它前面是.的话，那么就无敌了
+// 误区2：不同元素的问题，不是要去子串，而是整个匹配
+//此题没有AC，在我不断的补救过程中，它终是没有通过测试用例，在最后50个用例处卡住，一开始是对正则表达式的匹配没有搞清楚
+//接着对于纯if else的判断，不用递归是不行的。。。
+class Solution {
+public:
+    bool isMatch(const char *s, const char *p) {
+		char preChar;
+		preChar = *p;
+		bool tag = true;
+		vector<char> resultStack;
+		int i =0,j = 0;
+		while(s[i] != '\0'&& p[j] != '\0')
+		{
+			if(s[i] == p[j])
+			{
+				resultStack.push_back(p[j]);
+				preChar = p[j];
+			}
+			else
+				if(p[j] == '*')
+				{
+					tag = false;
+					while(s[i] != '\0'&&( s[i] == preChar || preChar == '.')) // 前面如果是.的话，那么这个*就无敌了
+					{
+						resultStack.push_back(s[i]);
+						i++;
+					}
+				
+					i--;	
+					preChar = s[i];
+				}
+				else
+					if(p[j] == '.')
+					{
+						resultStack.push_back(s[i]);
+						preChar = p[j];
+					}
+					else //有不同的元素时，后面一定要跟着*
+					{						
+						if(p[j++] != '\0'&&p[j] == '*')
+						{
+							j++;
+							continue;
+						}
+						else
+							return false;
+					}						
+			i++;
+			j++;			
+		}
+		int n = 0;
+		while(s[n] != '\0')
+			{
+				if(n == resultStack.size()|| s[n] != resultStack.at(n))
+					return false;
+				n++;
+			}
+		int m = j;
+		while(p[m] != '\0')
+		{
+			if(p[m] !=  preChar )
+			{
+				if(p[m++]!='\0' && p[m] == '*')
+				{
+					m++;
+					continue;
+				}
+				m--;
+				if(p[m] != '.')
+					return false;
+			}
+			else
+				if(tag)
+					return false;			
+			m++;
+		}
+		return true;
+	}
+};
