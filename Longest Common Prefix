@@ -1,0 +1,29 @@
+//很简单的题目，一开始没有理解清楚什么是最大公共前缀，其实以第一个字符串为目标即可，然后按个比较，
+//过程中进行长度等的比较
+//prefixlen的设置很巧妙
+class Solution {
+public:
+    string longestCommonPrefix(vector<string> &strs) {
+		int num = strs.size();	
+		string result = "";
+		int i = 0;
+		if(num == 0)
+			return result;
+		for(int prefixLen = 0;;prefixLen++)
+		{
+			int i =0;
+			for(;i < num;i++)
+			{
+				int len = strs[i].size();
+				if(len <= prefixLen ||strs[i].at(prefixLen) !=strs[0][prefixLen] )
+					break;
+			}
+			if(prefixLen == strs[0].size()|| i < num)
+				break;
+			result += strs[0][prefixLen];
+		}
+		return result;
+
+        
+    }
+};
