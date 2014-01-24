@@ -1,0 +1,59 @@
+//应该是可以再简化的。
+class Solution {
+public:
+	map<int,string> source;
+	stack<string> temp;
+	void convert(int x,int c)
+		{		
+			switch(x)
+			{
+			case(4):
+				temp.push(source[5*pow(10,c)]);
+				temp.push(source[pow(10,c)]);
+				break;
+			case(5):
+				temp.push(source[5 * pow(10,c)]);
+				break;
+			case(9):
+				temp.push(source[pow(10,c+1)]);
+				temp.push(source[pow(10,c)]);
+				break;
+			default:
+				int t = x;
+				if(x > 5)
+					t = x-5;
+				for(int i = 0;i < t;i++)
+					temp.push(source[pow(10,c)]);
+				if(x >5) //感觉这里还可以简化
+					temp.push(source[5*pow(10,c)]);
+			}
+	}
+    string intToRoman(int num) {
+		string result;
+		source[1]= 'I';
+		source[5] = 'V';
+		source[10] = 'X';
+		source[50] = 'L';
+		source[100] = 'C';
+		source[500] = 'D';
+		source[1000] = 'M';
+		int n = 0;
+		while(num)
+		{			
+			int g = num % 10;
+			convert(g,n);
+			int left = num / 10;
+			if(left != 0)
+				n++;
+			num /= 10;
+		}
+		int j =0;
+		while(!temp.empty())
+		{
+			result += temp.top();
+			temp.pop();
+		}
+		return result;
+	}
+		
+};
