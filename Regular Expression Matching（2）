@@ -1,0 +1,25 @@
+//学习别人的方法。。
+
+public:
+    bool isMatch(const char *s, const char *p) {
+		if(*p == '\0') return (*s == '\0');
+		if(*(p + 1) != '*' )
+		{
+			if((*s == *p)||(*p == '.'&& *s != '\0'))
+				return isMatch(s+1,p+1);
+			else
+				return false; 
+		}
+		else
+		{
+			while((*s == *p)|| (*p == '.')&& *s != '\0')
+			{
+				if( isMatch(s,p+2))//这句是本题递归的精髓！！假定第一个*是代表0的，且两个元素之后的元素若是不相等就开始挪动s.
+					return true;
+				s++;
+			}
+
+			return isMatch(s,p+2);
+		}
+	}
+};
