@@ -1,0 +1,56 @@
+//这里知道了output limit exceeded 就是超时了，在将外层循环缩减和在第一层循环就将相同元素去除的情况下AC
+//递归再一次深刻认知，想将其返回所想要的值，return 函数
+//用了二分查找的思想，总体的复杂度是 n方logn
+//好像可以用iterator去完成，不过依然用了下标，而且一些find等封装函数也可用，但是仍然没有掌握它们的用法
+class Solution {
+public:
+	vector<vector<int>> results;
+	int mysearch(int start,int end,int key,vector<int> &source)
+	{
+		
+		if(start <= end)//这里一定是 小于等于，这样才可以访问到头尾元素
+		{
+			int mid = (start + end) /2;
+			if(key == source[mid])
+				return key;
+			else
+				if(key < source[mid])
+					return mysearch(start,mid-1,key,source);//mid 这里也一定要减1和加1 这样才会跳出条件，否则会一直循环
+				else
+					if(key > source[mid])
+						return mysearch(mid+1,end,key,source);
+		}
+		return INT_MAX;//递归直接return 函数就好了
+	}
+    vector<vector<int> > threeSum(vector<int> &num) {		
+		sort(num.begin(),num.end());	
+		int len = num.size();
+		int j = 0;
+		for(;j < len;j++)
+			if(num[j] > 0)
+				break;
+		int iter = 0,riter ;
+		vector<int> preresult;
+		for(;iter < j;iter++)
+		{
+			if(iter > 0 && num[iter] == num[iter-1])//处理相等的元素
+					continue;
+			for(riter = len - 1;riter >iter;riter --)
+			{///
+				int firstSum = num[iter] + num[riter];
+				int temp = mysearch(iter + 1,riter - 1,0-firstSum,num);
+				if(temp == INT_MAX)
+					continue;			
+				vector<int> result;
+				result.push_back(num[iter]);
+				result.push_back(temp);
+				result.push_back(num[riter]);
+				if(preresult == result)
+					continue;
+				results.push_back(result);
+				preresult = result;
+			}
+		}
+		return results;
+    }
+};
