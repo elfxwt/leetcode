@@ -1,0 +1,52 @@
+//没有通过，time limit exceed
+// 可是已经为n立方了，不知道再怎样去缩减了。。
+//解题报告上说用map 去缓存，可是时间复杂度是一样的呀。。
+class Solution {
+	vector<vector<int>> results;
+public:
+    vector<vector<int> > fourSum(vector<int> &num, int target) {
+		sort(num.begin(),num.end());
+		int len = num.size();
+		if(len < 4)
+			return results;
+		auto endlimit =prev(num.end(),4);
+		for(auto a = num.begin();a != endlimit;a =upper_bound(a,endlimit,*a))
+		{
+			auto c = prev(num.end(),1);
+			int preC = INT_MAX;
+			for(;c != next(a,2);--c)
+			{
+				auto b = next(a);
+				if(preC == *c)
+					continue;
+				preC = *c;
+				auto d = prev(c,1);
+				while(b < d)
+				{
+					int sum = *a + *b + *c +*d;
+					if(sum == target)
+					{
+						vector<int> result;
+						result.push_back(*a);
+						result.push_back(*b);
+						result.push_back(*d);
+						result.push_back(*c);
+						results.push_back(result);
+						b = upper_bound(b,d,*b);
+						--d;
+					}
+					else
+						if(sum > target)
+						{
+							int pre = *d;
+							while(pre == *d) //处理相等元素
+								--d;
+						}
+						else
+							b = upper_bound(b,d,*b);//找下一个不相等的数
+			}
+			}
+		}
+		return results;
+    }
+};
