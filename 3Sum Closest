@@ -1,0 +1,33 @@
+//此题本来接在3sum之后，还以为可以秒杀，结果一开始题会错意，在不断的if else
+//后来题读懂之后，发现自己原来写的3sum 没有一般性，此题是上题目的升级版，将其扩展到一般化
+//用指针不用下标的好处
+class Solution {
+public:
+    int threeSumClosest(vector<int> &num, int target) {
+		sort(num.begin(),num.end());
+		int mingap = INT_MAX;
+		int finalSum = 0;
+		auto a = num.begin();
+		auto endlimit = prev(num.end(),2);
+		for(;a != endlimit;a = uppbfer_bound(a,endlimit,*a)) // 这样就可以用指针跳过相同元素
+		{
+			auto b = next(a);
+			auto c = prev(num.end(),1);
+			while(b < c)
+			{
+				int sum = *a + *b + *c;
+				int gap = abs(target - sum);
+				if(gap < mingap)
+				{
+					mingap = gap;
+					finalSum = sum;
+				}
+				if(sum > target)
+					c--;
+				else
+					b++;
+			}
+		}
+		return finalSum; 
+    }
+};
