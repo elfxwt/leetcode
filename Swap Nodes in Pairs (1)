@@ -1,0 +1,24 @@
+// my idea is to delete the first element and creat a new element with same value  and then insert this element to the right
+// position. but it is a little complex to deal with the pointers 
+// there have a simple way to solve, just exchage the next poiter directly  . need to study
+class Solution {
+public:
+    ListNode *swapPairs(ListNode *head) {
+		ListNode h(-1);
+		ListNode *p = &h;
+		p->next = head;
+		while(head && head->next)
+		{
+			ListNode *first = new ListNode(head->val);// 如果没有new而直接是（）初始化则会用以前的地址而出现问题！！
+			ListNode *second = head->next;           // curious ,the constructor use new is safe 
+			p->next = second;// 把第一个值先拆掉
+			ListNode *third = second->next;// insert the new element
+			second->next = first;
+			first->next = third;	
+			p = first;
+			head = third;
+		}
+		return h.next;
+
+    }
+};
