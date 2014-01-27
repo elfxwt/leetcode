@@ -1,0 +1,40 @@
+/深度搜索的感觉，再一次认识递归，利用递归去实现相关的功能
+// string 也有push pop 吓坏我了，string这么强大的。。
+class Solution {
+	map<int,string> source;
+	vector<string> result;
+
+public:
+	void dfs(string digits,int index,string path)
+	{
+		if(index == digits.size())
+			result.push_back(path);
+		else
+		{
+			string curString = source[digits[index] - '0'];
+			for(int i =0;i < curString.size();i++)
+			{
+				path.push_back(curString.at(i));
+				dfs(digits,index + 1,path);
+				path.pop_back();//注意要去掉最上面的元素
+			}
+		}
+
+	}
+    vector<string> letterCombinations(string digits) {
+		source[0] = "";
+		source[1] = "";
+        source[2] = "abc";
+		source[3] ="def";
+		source[4] = "ghi";
+		source[5] = "jkl";
+		source[6] = "mno";
+		source[7] = "pqrs";
+		source[8] = "tuv";
+		source[9] = "wxyz";
+		dfs(digits,0,"");
+		return result;
+		
+
+    }
+};
