@@ -1,0 +1,34 @@
+ // this question employs stack with a litter easyness but pay attention to the details
+  class Solution {
+	  map<char,int> source;
+public:
+    bool isValid(string s) {
+		source['('] = 1;
+		source[')'] = -1;
+		source['['] = 2;
+		source[']'] = -2;
+		source['{'] = 3;
+		source['}'] = -3;
+		size_t len = s.size();
+		if(len % 2 != 0 || len == 0)
+			return false;
+		stack<char> result;
+		for(int i = 0;i < len;i++)
+		{
+			if(source[s[i]] > 0)
+				result.push(s[i]);
+			else
+			{
+				if(result.empty() ||source[result.top()] + source[s[i]] != 0 )
+					return false;
+				result.pop();
+			}
+		}
+		if(result.empty())
+			return true;
+		else
+			return false;
+	}
+ 
+
+};
