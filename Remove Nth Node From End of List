@@ -1,0 +1,32 @@
+//终于明白 在这里带星号的结构体和不带星号的结构体声明是怎样的了，一个指针，是用->另外是属性，用.
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+
+class Solution {
+public:
+    ListNode *removeNthFromEnd(ListNode *head, int n) {
+		ListNode tempHead(INT_MAX);//这种初始化方式
+		tempHead.next = head;
+		ListNode *p = &tempHead ;
+		ListNode *q = &tempHead;
+		while(n--)
+			p = p->next;
+		while(p->next)
+		{
+			p=p->next;
+			q = q->next;
+		}
+		ListNode *temp = q->next;
+		q->next = temp->next;
+		delete temp;
+		return tempHead.next;
+    }
+};
