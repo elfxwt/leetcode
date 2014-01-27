@@ -1,0 +1,41 @@
+// this solution is not elegance at all, want to keep the pointer in the same list,actually has no need to do that 
+class Solution {
+public:
+    ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
+		ListNode *max = l1;   // set too many variables
+		ListNode *min = l2;
+		if(l1 == NULL || l2 == NULL)
+			return l1 == NULL?l2:l1;
+		if(l1->val < l2->val)
+		{
+			max = l2;
+			min = l1;
+		}
+		ListNode *p = min;
+		ListNode *q = max;
+		ListNode *pre = min;
+		while (p && q)
+		{
+			int v1 = p->val;
+			int v2 = q->val;
+			if(v1 <= v2)//第一个节点肯定小
+				{
+					pre = p;
+					p = p->next;
+			}
+
+			else
+			{
+				ListNode *temp = q;
+				q = q->next;
+				pre->next = temp;
+				temp->next = p;
+				pre = temp; // 注意前面的元素是在变化的  practice the insert function
+			}
+		}
+		if(q)
+			pre->next = q;
+		return min;
+		}
+    
+};
