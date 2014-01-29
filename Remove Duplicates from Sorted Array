@@ -1,0 +1,19 @@
+// according to the previous problem ,this problem is easy to be solved
+class Solution {
+public:
+    int removeDuplicates(int A[], int n) {
+        int len = 0;
+		if(n < 2)
+			return n;
+		int pre = INT_MAX;
+		for(int i =0;i < n;i++)
+		{
+			if(pre != A [i])
+			{
+				A[len++] = A[i];
+				pre = A[i];
+			}
+		}
+		return len;
+    }
+};
