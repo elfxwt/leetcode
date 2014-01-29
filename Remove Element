@@ -1,0 +1,33 @@
+// don't know this problem clearly, there should be many solutions about it . and there are some doubts about that,
+// but however,this solution is Accepted. 
+// this problem is suck
+class Solution {
+public:
+    int removeElement(int A[], int n, int elem) {
+		sort(A,A + n);
+		int elemNum = 0;
+		int endI = 0;
+        for(int i = 0;i < n;i++)
+		{
+			if(A[i] == elem)
+				elemNum++;
+			else
+				if(A[i]>elem)
+				{
+					endI = i;
+					break;
+				}
+		}
+		if(endI != 0)
+		{
+		int startI = endI - elemNum;
+		for(int j = endI;j < n;j++)
+		{
+			A[startI] = A[j];
+			startI ++;
+		}
+		}
+		return n-elemNum;
+
+    }
+};
