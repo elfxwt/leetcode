@@ -1,0 +1,69 @@
+/*动态规划的题目（dp） 和深度优先搜索的题目（DFS，deep first search） 这两类题目是有一定难度的，但是有一般性，dp目前来看是
+会有一个数学公式可找的，找到当前元素和前面元素的数学公式，那么编程去实现这个公式就可以了。
+dfs的题目是遍历所有的组合并存储起来，这个时候你要去最深处找到小组合，这个小组合组成了大组合，比如二叉树一般是左右子树分开，
+这个应该是有很多规律可循，目前做的题目太少，归纳总结还不够格，留待后面继续总结。
+
+求组合数，所有的平衡二叉树，简单是简单所有节点的值就是1-n的排序，也因为此算法简单但是实际情况就需要去处理额外的节点值了。
+*/
+
+/*二叉查找树，BST，在此题中，将所有的点当成根节点，然后去求每个根节点的左右子树，然后将这棵树的根节点建立起来，组合好左右子树
+放入到最后的容器里，在求左右子树的过程中依然是这样的。
+在递归过程中，重点是参数的确认，如何利用好参数是非常重要的，参数决定了终止条件和迭代次序，在此题目中，正因为节点值都是按序
+排好的值，所以可以既当节点值，又可以当迭代条件来用
+
+
+*/
+class Solution {
+public:
+	vector<TreeNode *> genearte(int start,int end)
+	{ 
+		vector<TreeNode *> subtree;
+		if(start > end)
+		{
+			subtree.push_back(nullptr);
+			return subtree;
+		}
+		if(start == end)
+		{
+			subtree.push_back(new TreeNode(start));
+		    return subtree;
+		}
+		for(int i = start;i <= end;i++)
+		{
+			vector<TreeNode*> leftTree = genearte(start,i - 1);
+			vector<TreeNode *> rightTree = genearte(i+1,end);
+			for(TreeNode* m:leftTree)
+				for(auto n: rightTree)
+				{
+					TreeNode *root = new TreeNode(i);
+					root->left = m;
+					root->right = n;
+					subtree.push_back(root);
+				}
+		}
+		return subtree;
+	}
+
+    vector<TreeNode *> generateTrees(int n) {
+			return genearte(1,n);
+		
+    }
+};   
+
+
+/*求组合数
+*/
+class Solution {
+public:
+    int numTrees(int n) {
+		vector<int> f(n+1,0); // vector 初始化方式,fill
+		f[0] = 1;
+		f[1] = 1;
+		for(int i = 2;i <= n;i++)
+			for(int j = 1;j <=i;j++)
+				f[i] += f[j-1]*f[i - j] ; // 关键就是这个数学公式！
+		return f[n];
+
+        
+    }
+};
