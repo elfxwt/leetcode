@@ -1,0 +1,29 @@
+// 中间循环条件其实是可以用if -else 的，用了较多的while 看起来不是很协调
+// 其实先序遍历我也用的这个思路，所以先序的时候费了点功夫
+
+
+class Solution {
+public:     
+    vector<int> inorderTraversal(TreeNode *root) {
+		vector<int> result;
+		stack<TreeNode *> tempStack;
+		TreeNode *temp = root;
+		while(temp || !tempStack.empty())
+		{
+			while(temp)
+			{
+				tempStack.push(temp);
+				temp = temp->left;
+			}
+			if(!tempStack.empty())
+			{
+				temp = tempStack.top();
+				result.push_back(temp->val);
+				temp = temp->right;
+				tempStack.pop();
+			}
+		}
+		return result;
+        
+    }
+};  
