@@ -1,0 +1,31 @@
+// 自己写的就是啰嗦，一点都不优雅
+// 只想着把要左边的先进栈，没有想到右节点也可以先入栈，不弹出，没有充分利用栈的特点。
+//但最终是AC了。
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode *root) {
+		stack<TreeNode*> tempSave;
+		vector<int> result;
+		TreeNode *tempNode = root;
+		if(root == nullptr)
+			return result;
+		tempSave.push(tempNode);
+		result.push_back(tempNode->val);
+		tempNode = tempNode->left;
+		while(!tempSave.empty()|| tempNode)
+		{			
+			while(tempNode)
+			{
+				tempSave.push(tempNode);
+				result.push_back(tempNode->val);
+				tempNode = tempNode->left;
+			}
+			if(!tempSave.empty())
+			{
+				tempNode = tempSave.top()->right;
+				tempSave.pop();		
+			}
+		}
+		return result;  
+    }  
+};   
