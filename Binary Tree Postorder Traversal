@@ -1,0 +1,40 @@
+// memory limit exceeded 看来不能用栈了，非得用那个Morris的方法了。。。
+// but this method should be understood also ..pay attention to the node which pop from stack, you need tag and the condition
+to decide if this node can be pop.
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode *root) {
+		vector<int> result;
+		stack<TreeNode *> tempStack;
+		TreeNode * p = root;
+		TreeNode * pre;
+		bool tag = false;
+		while(p || !tempStack.empty())
+		{
+			while(p)
+			{
+				tempStack.push(p);
+				p = p->left;
+			}
+			pre = nullptr;
+			tag = true;
+			p = tempStack.top();
+			while(tag && !tempStack.empty())
+			{
+				if(p->right == pre)  // 这个很重要
+				{
+					result.push_back(p->val);
+					tempStack.pop();
+					pre = p;
+				}
+				else
+				{
+					p = p->right;
+					tag = false;
+				}
+			}
+		}
+		return result;        
+    }
+};
