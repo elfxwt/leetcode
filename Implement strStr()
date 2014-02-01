@@ -1,0 +1,43 @@
+	//考虑各种情况
+	class Solution {
+	public:
+		const char *strStr(const char *haystack,const  char *needle) {
+			int i =0,j = 0,pre = 0;
+			bool flag = false;//限制其必须是经过了pre的计算才进行设置i = pre
+			bool tag = true; // 限制后面第一个出现与目标字符串相同的指针
+			if(*(needle + j) == '\0')
+				return haystack;
+	
+			while( *(haystack + i) != '\0')
+			{
+				if(*(haystack + i) == *(needle + j))
+				{
+					if(*(haystack + i) == *(needle)&& j != 0 && tag)
+					{
+						  pre = i;
+						  flag = true;
+						  tag = false;
+					}
+					i++;
+					j++;
+					if(*(needle + j)== '\0')
+						return (haystack + i - j );	
+					
+				}
+				else
+				{
+					if(pre != 0 && flag)
+					{
+						i = pre;
+						flag = false;
+						tag = true;
+					}
+					else
+						if((*(haystack + i) != *(needle)))
+							i++;
+					j = 0;
+				}
+			}
+			return nullptr;		                                     
+		}
+	};
