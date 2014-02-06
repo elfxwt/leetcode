@@ -1,0 +1,38 @@
+// need to study about integers deasl
+// INT_MIN -> unsigned int  
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+		int quotient = 0;
+		/*dividend = dividend == INT_MIN? INT_MIN + 1:dividend;
+		divisor = divisor == INT_MIN? INT_MIN + 1:divisor;*/
+		// 对于INT_MIN 的判断！不能用abs,所以用unsigned int
+		unsigned int a  = dividend >= 0? dividend:-dividend;
+		unsigned int b =  divisor >= 0? divisor:-divisor; 
+		const bool flag = (divisor < 0&& dividend > 0 )|| (divisor > 0 && dividend < 0);
+		
+		if(divisor == 0)
+			return 0;
+		if(divisor == 1)
+			return dividend; // 这两个判断可以没有
+		while (a >= b)
+		{		
+			int extra = 1;
+			unsigned int tempDivs = b; // 如果当前减数太大，就从开始设置减数
+			while(a >= tempDivs)
+			{
+				quotient += extra;
+				a -= tempDivs;
+				if(tempDivs< INT_MAX >> 1) // 最小值除以2 ，是成倍的往下减，point
+				{
+					tempDivs += tempDivs;
+					extra += extra; // 这个也是成倍的加
+				}
+			}
+				          		
+		}
+		if(flag) //一负一正
+			return -quotient;
+		return quotient;
+    }
+};
