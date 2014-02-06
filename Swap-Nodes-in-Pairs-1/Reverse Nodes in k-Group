@@ -22,3 +22,35 @@ public:
 
     }
 };
+
+/*sum up
+reversive way :pay attention to the details  
+*/
+class Solution {
+public:
+    ListNode *reverseKGroup(ListNode *head, int k) {
+		if(head == nullptr || k < 2 || head->next == nullptr) // no node or one node or reverse one node
+			return head;
+		ListNode *nextNode = head;
+		for(int i = 0;i < k;i++)
+		{
+			if(nextNode)
+				nextNode = nextNode->next;
+			else
+				return head;
+		}
+		ListNode *newNext = reverseKGroup(nextNode,k);   
+		ListNode *preNode = nullptr;//头结点
+		ListNode *curNode = head;
+		while(curNode != nextNode)// 不是newNext,两者是不一样的。
+		{
+			ListNode *postNode = curNode->next;
+			curNode->next = preNode?preNode:newNext; // key point 
+			preNode = curNode;
+			curNode = postNode;
+		}
+		return preNode;
+			 
+        
+    }
+};
