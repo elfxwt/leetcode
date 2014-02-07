@@ -1,0 +1,57 @@
+/*
+自己的想法，从起点开始往下可能的走法，类似于深度搜索-》超时
+*/
+class Solution {
+	int path;
+public:
+	void deep(int x,int y,int maxX,int maxY)
+	{
+		if(x == maxX && y == maxY)
+		{
+			path++;
+			return;
+		}
+		else
+			if(x == maxX && y < maxY)
+				deep(x,y+1,maxX,maxY);
+			else
+				if(x < maxX && y == maxY)
+					deep(x+1,y,maxX,maxY);
+				else
+					if(x <maxX && y < maxY)
+					{
+						deep(x+1,y,maxX,maxY);
+						deep(x,y+1,maxX,maxY);
+					}
+		
+
+	}
+    int uniquePaths(int m, int n) {
+
+		path = 0;
+		if(m == 0 || n == 0);
+		else 
+		  deep(1,1,m,n);
+		return path;
+        
+    }
+};
+
+//学习了备忘录的方法，就是自顶向下处理，并且缓存自己已经处理过的子问题，因为子问题还会被用到
+// 动态规划的方法，就是自顶向下，还是要找到转换公式，有时候还要灵巧对待
+class Solution {
+public:
+	
+    int uniquePaths(int m, int n) {
+
+		/*vector<vector<int>> f(m+1,vector<int> (n + 1,1));*/
+		vector<int> f(n,0);
+		f[0]=1;
+		for(int i = 0;i < m;i++)
+			for(int j = 1; j < n;j++) // 用列来思考问题，单纯的列和单纯的行！
+				f[j] = f[j-1] + f[j];
+		return f[n-1];
+        
+    }
+};
+
