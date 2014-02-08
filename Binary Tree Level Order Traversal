@@ -1,0 +1,43 @@
+//spend one hour .. a little longer 
+// pay attention to the level requirements amd the result vector
+class Solution {
+public:
+    vector<vector<int> > levelOrder(TreeNode *root) {
+		vector<vector<int>> result;
+		vector<int> midRt;
+		int level = 0;
+		queue<TreeNode *> assisQueue;
+		if(root == nullptr)
+			return result;
+		assisQueue.push(root);
+		TreeNode tag(INT_MAX);
+		assisQueue.push(&tag);
+		result.push_back(midRt);
+		while(assisQueue.size()!= 1)
+		{
+			TreeNode * temp = assisQueue.front();
+			if(temp->val != INT_MAX)
+			{
+				result[level].push_back(temp->val);// 单纯设置level 是不行的
+				if(temp->left)
+				{
+					assisQueue.push(temp->left);
+				}
+				if(temp->right)
+					assisQueue.push(temp->right);
+				    
+			}
+			else
+			{
+				level++;
+				result.push_back(midRt);// 防止溢出
+				assisQueue.push(&tag);
+
+			}
+				assisQueue.pop();	
+		}
+		
+		return result;
+        
+    }
+};
