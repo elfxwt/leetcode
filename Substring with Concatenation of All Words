@@ -1,0 +1,44 @@
+/*
+一开始思路不对，然后就没找到正确的方向，然后看了博客答案找到了方向，其实很简单。一开始去想字符串本身自带的方法了
+1 任意组合的字符串，想map 可以用find 来找
+2 判断是否全部循环完全，用下标，别只会用 flag TRUE和FALSE去判断
+3 对于map里面重复的字符串可以用计数去确定它的一些属性，key->value  value 可以记录出现的次数，从而在后面做判断
+4 此题用multimap 会 Time limit exceed 
+5 multimap insert makepair  
+
+*/
+
+class Solution {
+public:
+    vector<int> findSubstring(string S, vector<string> &L) {
+		vector<int> result;
+		int wordNum = L.size();
+		if(wordNum == 0)
+			return result;
+		int wordLen = L[0].size();
+		int len = wordNum * wordLen;
+		/*multimap<string,int> strBase ;*/ // 这里可以不用multimap 否则会超时
+		map<string,int> strBase;
+		map<string,int> curString;
+		for(int j = 0;j < (int)L.size();j++)
+			/*strBase.insert(make_pair(L[j],j)); */
+				strBase[L[j]]++;// 自加，很重要，计算重复数字个数的！
+		for(int i = 0;i <=(int) S.size()- len;i++)
+		{
+			string midString(S,i,len);
+			curString.clear();
+			int p = 0;
+			for(;p < wordNum;p++)
+			{
+				string temString(midString,p*wordLen,wordLen);
+				if(strBase.find(temString) == strBase.end())
+					break;
+				curString[temString]++;
+				if(curString[temString] > strBase[temString])
+					break;
+			}
+			if(p == wordNum)// 用这个比flag 强太多了！笨死了
+					result.push_back(i);
+		}
+	}
+};
