@@ -1,0 +1,37 @@
+// 一圈一圈从左道右，从上到下，从右向左，从下到上，不过就是终止条件不太好判断，导致自己想的方法没有实现成功，因为不知道何时
+// 停止，下面的方法可以减少变量，通过限制条件来进行。非常巧妙
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int> > &matrix) {
+		vector<int> result;
+		/*const int m = matrix.size() - 1;
+		const int n = matrix[0].size() - 1;*/
+		if(matrix.empty())
+			return result;
+		int beginX = 0,endX = matrix[0].size() - 1;
+		int beginY = 0,endY =  matrix.size() - 1;
+		/*int c = 0,i = 0,j = 0;*/
+		while(true)
+		{
+			for(int j = beginX;j<=endX;j++)
+				result.push_back(matrix[beginY][j]);
+			if(++beginY > endY)
+				break;
+			for(int i = beginY;i <= endY;i++)
+				result.push_back(matrix[i][endX]);
+			if(--endX < beginX)
+				break;
+			for(int j = endX;j >=beginX;j--)
+				result.push_back(matrix[endY][j]);
+			if(--endY < beginY)
+				break;
+			for(int i = endY;i >= beginY;i--)
+				result.push_back(matrix[i][beginX]);
+			if(++beginX  > endX)
+				break;
+		}
+		return result;
+       
+    }
+};
