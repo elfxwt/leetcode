@@ -1,0 +1,29 @@
+class Solution {
+public:
+// 注意顺序是不一样的，增序是可以的，倒序的话就不行了，所以要左右扫描。你竟然去给人家排序！真有你的！
+    int candy(vector<int> &ratings) {
+		int num = ratings.size();
+		vector<int> increment(num); // 辅助空间-> 可以因此而想到 备忘录方法
+		int result = num;
+		int inc = 0;
+		for(int i = 1;i < num;i++)
+		{
+			if(ratings[i] > ratings[i -1])
+				increment[i] = ++inc; // 第一遍就是给增序的添加上合理的数
+			else
+				inc = 0;
+		}
+		for(int i = num - 2;i >=0;i--)
+		{
+			if(ratings[i] > ratings[i +1])
+				increment[i] = max(++inc,increment[i]); // 去最大的，对于那些倒序的来说
+			else
+				inc = 0;
+		}
+		for(int i =0;i<num;i++)
+			result += increment[i];
+		return result;		
+    }
+};
+
+//备忘录方法
