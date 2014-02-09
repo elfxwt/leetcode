@@ -29,3 +29,28 @@ public:
 		return result;  
     }  
 };   
+
+// 另外一道题目，其实际上是一样的，用到preOrder ，参考其方法
+
+class Solution {
+public:
+    void flatten(TreeNode *root) {
+		TreeNode head(1);
+		TreeNode *p = root;
+		TreeNode *r = &head; // 多加了一个指针
+		stack<TreeNode *> s;
+		if(p!=nullptr)
+			s.push(p);
+		while(!s.empty())
+		{
+			p = s.top();
+			s.pop();
+			if(p->right != nullptr) s.push(p->right);
+			if(p->left != nullptr) s.push(p->left);
+			r->right = p;
+			r->left = nullptr;
+			r=r->right; // 注意结点和 指针的区别 ，用head = *p 是不行的，root 没有改变
+		}
+		
+    }
+};
