@@ -1,0 +1,46 @@
+// 自己做的，o(n*m)  一看就是比较麻烦的那种，但是不知道为什么是 runtime error ,应该是 time limit exceed 才对
+
+class Solution {
+public:
+    void merge(int A[], int m, int B[], int n) {
+		int i,j;
+		for(i = 0,j = 0;j < n&&i<m;i++)
+		{
+			if(A[i] > B[j])
+			{
+				int p = m;
+				while(p >= i)
+				{
+					A[p+1] = A[p];
+					p--;
+				}
+				A[i] = B[j];
+				m++;
+				j++;
+			}
+		}
+		while(j < n)
+			A[m++] = B[j++];
+
+	}
+};
+
+// o(n+m) 的思路
+
+class Solution {
+public:
+    void merge(int A[], int m, int B[], int n) {
+		// 从后往前排不就得了！不会换换思路！
+		int i = m -1;
+		int j = n -1;
+		int len = m + n -1;
+		while (i >= 0 && j >= 0)
+			A[len--] = A[i] >= B[j]?A[i--]:B[j--];
+		while(j >=0) // 不用管A，如果剩下了，就直接存在于A中了
+			A[len--] = B[j--];
+
+	}
+};
+
+这个思路天巧妙了，数组看来比链表 更有优势，不过这个也是建立在题意上说A足够长的基础上，如果没有的话，就稍稍有点难办，这个与
+有序链表的合并结合起来一起记住
