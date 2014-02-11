@@ -1,8 +1,11 @@
+// 发现自己一个很大的误区，两个存入的地方，高度及其对应的下标，是非常容易混
+// 图和数字计算结合起来了，结果导致了非常低级的错误，这个误区要非常警惕！！
+
 class Solution {
 public:
     int largestRectangleArea(vector<int> &height) {
 		stack<int> indexStack;
-	    height.push_back(0);
+	    height.push_back(0);// 保证最后出现小元素，将前面元素合并 ，注意是height 不是stack
 		int maxArea = 0; // the first histogram put i
 		for(int i = 0;i < height.size();)// 
 		{
@@ -13,7 +16,9 @@ public:
 				int temIndex = indexStack.top();
 				indexStack.pop(); // the current height
 				int temArea = height[temIndex] * (indexStack.empty()?i:(i - indexStack.top() - 1)); // 这里！！
-				maxArea = max(maxArea,temArea);
+				// 这个条件非常重要，当个栈里面是空的时候，说明前面是相等元素
+				maxArea = max
+				(maxArea,temArea);
 			}
 		}
 		return maxArea;
