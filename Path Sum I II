@@ -1,0 +1,44 @@
+class Solution {
+public:// 去遍历树的路径，不是遍历结点，不能利用前中后序的栈思想了，直接递归左右树
+    bool hasPathSum(TreeNode *root, int sum) {
+		if(root == nullptr)
+			return false;
+		if(root->left == nullptr && root->right== nullptr)
+			return sum == root->val;
+		return hasPathSum(root->left,sum-root->val) || hasPathSum(root->right,sum-root->val); // 这里比较关键
+	}
+};
+
+// path sum II  有了上题目的提醒，可以写出下一题目的算法  一遍通过  
+// 注意 二叉树的递归内涵
+
+class Solution {
+	vector<vector<int>> results;
+	void dfs(TreeNode *node,int num,vector<int> result)
+	{
+		if(node == nullptr)
+			return;
+		if(node->left == nullptr && node->right == nullptr)
+		{
+			if(num == node->val)
+			{
+				result.push_back(node->val);
+				results.push_back(result);
+			}
+				return;
+		}
+		result.push_back(node->val);
+		dfs(node->left,num-node->val,result);
+		dfs(node->right,num-node->val,result);
+	}
+
+
+public:
+    vector<vector<int> > pathSum(TreeNode *root, int sum) {
+		vector<int> result;
+		if(root != nullptr)		
+			dfs(root,sum,result);
+		return results;
+        
+    }
+};
