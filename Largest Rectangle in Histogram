@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int> &height) {
+		stack<int> indexStack;
+	    height.push_back(0);
+		int maxArea = 0; // the first histogram put i
+		for(int i = 0;i < height.size();)// 
+		{
+			if(indexStack.empty() || height[i] > height[indexStack.top()])
+				indexStack.push(i++); // use the shortest code
+			else
+			{
+				int temIndex = indexStack.top();
+				indexStack.pop(); // the current height
+				int temArea = height[temIndex] * (indexStack.empty()?i:(i - indexStack.top() - 1)); // 这里！！
+				maxArea = max(maxArea,temArea);
+			}
+		}
+		return maxArea;
+	}
+};
