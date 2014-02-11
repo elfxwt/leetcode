@@ -1,0 +1,31 @@
+// 学习 字符串与字符数组的一些函数，  倒序，find_if 和 finde_if_not 的用法，string 的构建
+class Solution {
+public: // 这个题可以延伸到split 分割字符串的实现，以空格分
+    int lengthOfLastWord(const char *s) {
+	    const string str(s); // 字符串的构建，利用字符数组构建，这样可以得到字符串的性质，比如说长度，可以得到o(logn)的复杂度
+		auto last = find_if(str.rbegin(),str.rend(),::isalpha);
+		auto first = find_if_not(last,str.rend(),::isalpha); // 注意参数和使用
+		return distance(last,first);
+
+        
+    }
+};
+//
+
+class Solution {
+public: // 这个题可以延伸到split 分割字符串的实现，以空格分
+    int lengthOfLastWord(const char *s) {
+		int len = 0;
+		while(*s)
+		{
+			if(*(s++) != ' ') // 以空格区分的
+				len++;
+			else
+				if(*s && *(s) != ' ')
+					len = 0;
+		}
+		return len;
+
+
+        
+    }
