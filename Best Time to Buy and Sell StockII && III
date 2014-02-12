@@ -1,0 +1,52 @@
+// 一开始没有太读懂题意，实际上是很简单的，想复杂了！
+// 依旧是贪心法，（原来这就是贪心法）=》 最大M字段和，m = 数组长度？？ bv
+
+class Solution {
+public:
+    int maxProfit(vector<int> &prices) {
+		int days = prices.size();
+		int profit = 0;
+		for(int i = 1;i < days;i++)
+		{
+			int diff = prices[i] - prices[i-1];
+			if(diff > 0)
+				profit += diff;
+		}
+		return profit;
+    }
+};
+
+//dp 的想法！！
+
+class Solution {
+public:
+    int maxProfit(vector<int> &prices) {
+		// 进行两次交易的时候
+		int days = prices.size();
+		if(days < 2)
+			return 0;
+		vector<int> before(days,0);
+		vector<int> back(days,0);
+		// 前半部分的计算
+		int minPrice = prices[0];
+		for(int i = 1;i < days;i++)
+		{
+			minPrice = min(prices[i],minPrice);
+			before[i] = max(before[i-1],prices[i] - minPrice);
+		}
+
+		int maxPrice = prices[days - 1];
+		for(int j = days -2;j >= 0;j--)
+		{
+			maxPrice = max(prices[j],maxPrice);
+			back[j] = max(back[j+1],maxPrice - prices[j]);
+		}
+
+		int profit = 0;
+		for(int i = 0;i < days; i++)
+			profit = max(profit, before[i] + back[i]);
+
+		return profit;
+        
+    }
+};
