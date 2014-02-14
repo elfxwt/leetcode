@@ -1,0 +1,33 @@
+// 因为o(n)想到了map,用map来做的。。不过标准答案人家用了个 unordered_map<int,bool> map
+class Solution {
+public:
+    int longestConsecutive(vector<int> &num) {
+        multimap<int,int> value;
+		int curLen = 1;
+		int maxLen = 1;
+		int curMin = 0;
+		
+		for(int i = 0;i < num.size();i++)
+			value.insert(pair<int,int>(num[i],i));
+		auto start = value.begin();
+		for(;start != value.end();start++)      
+		{
+			if(next(start) != value.end())
+			{
+				if(start->first - (next(start))->first == -1)	// 这里的比较还是有点啰嗦
+					curLen ++;	
+				else
+					if(start->first == (next(start))->first )	
+						continue;
+					else
+					{
+						maxLen = max(maxLen,curLen);
+						curLen = 1;
+					}			
+			}
+		}
+
+		return maxLen>curLen?maxLen:curLen;// 不要忘记了最后一次比较
+		
+    }
+};
