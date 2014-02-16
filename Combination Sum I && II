@@ -1,0 +1,80 @@
+//深度遍历的思路是想到的，但是禁止的条件和相关操作设置错误，导致自己编写的总是有问题，元素留存问题，在进入下次之后外面进行
+//pop就可以解决此问题
+
+class Solution {
+private:
+	
+	vector<vector<int>> results;
+	void dfs(int start,int target,vector<int> &sets,vector<int> &result)
+	{
+		if(target == 0) // 不是在等于的时候进入，而是在等于0的时候进入
+			{
+				results.push_back(result);
+				return;
+			}
+		for(int i = start;i < sets.size();i++) // 这里已经限制start了
+		{
+			
+			if(sets[i] > target) // 这个称之为剪枝？
+				return;
+			result.push_back(sets[i]); // 这个操作是不可回溯的。。
+			dfs(i,target - sets[i],sets,result);
+			result.pop_back(); // 出来之后就pop ,这样可以保证那些留存元素被弹出
+
+		}
+
+
+	}
+public:
+    vector<vector<int> > combinationSum(vector<int> &candidates, int target) {
+		vector<int> result;
+		if(candidates.size() > 0)
+		{			
+			sort(candidates.begin(),candidates.end());
+			dfs(0,target,candidates,result);
+		}
+		return results;        
+    }
+    
+    
+ // 以为2 就是简单的dfs(i+1... 但是里面有重复的元素，所以要保证每次进行的时候前面有重复的元素的时候计算下一个，所以
+ // 有了previous 这个变量来记录
+    class Solution {
+private:
+	
+	vector<vector<int>> results;
+	void dfs(int start,int target,vector<int> &sets,vector<int> &result)
+	{
+		if(target == 0) // 不是在等于的时候进入，而是在等于0的时候进入
+			{
+				results.push_back(result);
+				return;
+			}
+		int previous = -1;
+		for(int i = start;i < sets.size();i++) // 这里已经限制start了
+		{
+			if(previous == sets[i])
+				continue; // 每次重新循环的时候保证第一个元素都是不同的
+			
+			if(sets[i] > target) // 这个称之为剪枝？5
+				return;
+			previous = sets[i]; // 也保证中间没有相同的元素！
+			result.push_back(sets[i]); // 这个操作是不可回溯的。。
+			dfs(i+1,target - sets[i],sets,result);
+			result.pop_back(); // 出来之后就pop ,这样可以保证那些留存元素被弹出
+
+		}
+
+
+	}
+public:
+    vector<vector<int> > combinationSum2(vector<int> &candidates, int target) {
+		vector<int> result;
+		if(candidates.size() > 0)
+		{			
+			sort(candidates.begin(),candidates.end());
+			dfs(0,target,candidates,result);
+		}
+		return results;        
+    }
+};
