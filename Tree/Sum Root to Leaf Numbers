@@ -1,0 +1,35 @@
+//明白了递归的时候 存放变量的 vector 是需要局部变量的，且在参数里面，这样才可以回溯！！
+// 上午做的那道dfs 的题目按照自己的思路也是可以的！！
+class Solution {
+private:
+	
+	vector<string> results;
+	void dfs(TreeNode *node,string result)
+	{
+		if(node == nullptr)
+			return;
+		if(node->left == nullptr && node->right == nullptr)
+		{
+			result.push_back(node->val + '0');
+			results.push_back(result);
+			return;
+		}
+		result.push_back(node->val + '0');
+		dfs(node->left,result); // 这样就不用pop 了！！
+		dfs(node->right,result);
+	
+	}
+
+public:
+    int sumNumbers(TreeNode *root) {
+		string result; // 在这里声明的中间变量！！ 
+		dfs(root,result);
+		int sum = 0;
+		for(int i = 0;i < results.size();i++)
+		{
+			int num = atoi(results[i].c_str());
+			sum += num;
+		}
+		return sum;   
+    }
+};
