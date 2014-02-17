@@ -1,0 +1,28 @@
+递归迭代的方法应该能够想到，但是仍然是一塌糊涂，
+状态转移方程不是那么好想的，但是这种程度的应该要想到~
+word break ＩＩ　其实思路有的，但是更加难以实现和理解。。。明天再看那道题目了。。
+
+
+
+class Solution {
+
+
+	// 此题一开始确实在想用深搜，只不过深搜都没考虑清楚，源自它用的boost里面的数据类型
+	// 动态规划用状态转移方程
+public:
+    bool wordBreak(string s, unordered_set<string> &dict) {
+		vector<bool>f(s.size() + 1,false);
+		f[0] = true;
+		for(int i = 1;i <= s.size();i++)
+			for(int j = i - 1;j >=0;j--)
+			{
+				if(f[j] && dict.find(s.substr(j,i-j)) != dict.end())
+				{
+					f[i] = true;
+					break;
+				}
+			}
+			return f[s.size()];
+        
+    }
+};
