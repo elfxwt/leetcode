@@ -1,0 +1,10 @@
+// 不能只想遍历，想想可能有的情况
+  // 另外一种思路是利用栈，看是否成对的进入和进出
+class Solution {
+public:
+    bool isSameTree(TreeNode *p, TreeNode *q) {
+        if(!p && !q)return true;
+		if(!p || !q) return false;
+		return p->val == q->val && isSameTree(p->left,q->left) && isSameTree(p->right,q->right);
+    }
+};
