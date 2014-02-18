@@ -26,3 +26,7 @@ public:
         
     }
 };
+
+// 这个 DP + ＤＦＳ　的　word breakII 我想已经是极限难度了。。。。
+http://blog.csdn.net/cs_guoxiaozhu/article/details/14104789
+这篇文章分析的应该不错~~可是还是浆糊，需要时间来消化
