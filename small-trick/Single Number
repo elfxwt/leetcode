@@ -1,0 +1,12 @@
+  // 我想着是一种运算，但是NND，我没想到是异或这种变态的逻辑运算
+class Solution {
+public:
+    int singleNumber(int A[], int n) {
+        int result = 0;
+		for(int i = 0;i < n;i++)
+			result ^= A[i];
+		return result;
+    }
+};
+
+异或运算！！
