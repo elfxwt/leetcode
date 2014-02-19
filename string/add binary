@@ -1,0 +1,74 @@
+本来用这个方法的。。但是 说毛线 memeory limit exceeded
+class Solution {
+public:
+    string addBinary(string a, string b) {
+		size_t i = a.size() - 1;
+		size_t j = b.size() - 1;
+		string c;
+		int carry = 0;
+		while(i >=0 && j >=0)
+		{
+			int figureA = a[i]-'0';
+			int figureB = b[j]-'0';
+			int curFigure = figureA ^ figureB ^carry; // 这叫现学现卖
+			if( figureA + figureB == 2)
+				carry = 1;
+			else
+				if(figureA + figureB == 1 && carry == 1)
+					carry = 1;
+				else
+					carry = 0;
+			c.push_back(curFigure - '0');
+		}
+		int maxIndex = i;
+		char *left = &a[i];
+		if(i < j)
+		{
+			maxIndex = j;
+			left = &b[j];
+		}
+		maxIndex -=1;
+		while(maxIndex)
+		{
+			int temp = left[--maxIndex]-'0';
+			int figure = left[maxIndex] ^ carry;
+			if(temp + carry == 2)
+				carry = 1;
+			else
+				carry = 0;
+		}
+		c.reserve();
+		c = c.substr(c.find('1'));
+        return c;
+    }
+};
+
+//人家简单的算法
+
+class Solution { // 不能额外开辟空间，否则会memory limit exceeded,可是解题报告也是另外开辟的呀，凭什么说我的空间超了，
+	// 不过人家的算法真心简单
+public:
+    string addBinary(string a, string b) { 
+	/*	size_t i = a.size() - 1;
+		size_t j = b.size() - 1;*/
+		string result;
+		// 下次要出现这种判断大小的，可以用问号表达式来进行！
+		size_t n = a.size() > b.size()? a.size():b.size();
+		reverse(a.begin(),a.end());// 人家是先反转，这样就可以一并去处理长的和短的了
+		reverse(b.begin(),b.end());
+		int carry = 0;
+		for(int i = 0;i < n;i++)
+		{
+			int figurA = i > a.size()-1 ? 0:a[i] - '0'; // 是减！
+			int figureB = i > b.size() - 1? 0:b[i] - '0';
+			int midResult = (figurA + figureB + carry) % 2;// 也可以用异或，但是没有这个好理解
+			carry = (figurA + figureB + carry)/ 2;// 关键是carry 的计算，不用if else ,是求模运算！！
+			result.push_back(midResult + '0');  //是加！  可用insert 来不用下面的reverse
+		}
+		if(carry == 1)
+			result.push_back('1');
+		reverse(result.begin(),result.end());
+		return result;
+	}
+	
+};
