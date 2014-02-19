@@ -1,0 +1,37 @@
+用递归去实现迭代了，其实完全不必要。。。
+II改成迭代
+
+class Solution {
+
+public:
+    ListNode *deleteDuplicates(ListNode *head) {
+		ListNode newhead(INT_MAX);
+		newhead.next = head;
+		ListNode *pre = &newhead;
+		ListNode *cur = head->next;
+		bool flag = false;
+		while(cur || cur->next)
+		{
+			ListNode *last = cur->next;
+			while(last && last->val == cur->val)
+			{
+				flag = true;
+				last = last->next;
+			}
+			if(flag)
+			{
+				cur = last;
+				pre->next = last;
+			}
+			else
+			{
+				pre = cur;
+				cur = last;
+			}
+		flag = false;
+		}
+
+	return newhead.next;
+        
+    }
+};
