@@ -1,0 +1,46 @@
+//归并排序 
+// 但是顺序有点问题？并不是像我们所说的那种。。
+class Solution {
+private:
+	ListNode *mergeTwo(ListNode *a,ListNode *b)
+	{
+		ListNode dummy(1);
+		ListNode *p = &dummy; // 如果要new 的话，可能后面我还要进行内存释放，这样就不需要了？
+		for(;a !=nullptr ||b!=nullptr;p = p->next)
+		{
+			int val1 = a == nullptr?INT_MAX:a->val;
+			int val2 = b == nullptr?INT_MAX:b->val;
+			if(a>b)
+			{
+				p->next = b;
+				b = b->next;
+			}
+			else
+			{
+				p->next = a;
+				a = a->next;
+			}
+		}
+		return dummy.next;
+	}
+public:
+    ListNode *sortList(ListNode *head) {
+		if(head == nullptr || head->next == nullptr)
+			return head;
+		ListNode *nextPairB = head,*lastPairE = head;
+		while(nextPairB->next && nextPairB->next->next)
+		{
+			nextPairB = nextPairB->next->next;// 两个两个的往下走
+			lastPairE = lastPairE->next;//指向上一对的最后，也是nextPairB前指针,为分成两段做准备
+		}
+		//lastPairE->next = nullptr;// 断开了，后面部分和前面部分 不能这么做。。
+		nextPairB = lastPairE;
+		lastPairE = lastPairE->next;
+		nextPairB->next = nullptr;  // 在只有两个的情况下，需要这样做
+
+		ListNode *L1 = sortList(head);// 前半部分（继续分下去）
+		ListNode *L2 = sortList(lastPairE);
+		return mergeTwo(L1,L2);
+        
+    }
+};
