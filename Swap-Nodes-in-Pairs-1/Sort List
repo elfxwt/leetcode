@@ -1,4 +1,4 @@
-//归并排序 
+//归并排序  ，可引申到 数组的实现，其实下面这个思路就是根据数组的思想来的！！
 // 但是顺序有点问题？并不是像我们所说的那种。。
 class Solution {
 private:
@@ -6,11 +6,12 @@ private:
 	{
 		ListNode dummy(1);
 		ListNode *p = &dummy; // 如果要new 的话，可能后面我还要进行内存释放，这样就不需要了？
-		for(;a !=nullptr ||b!=nullptr;p = p->next)
+		for(;a !=nullptr ||b!=nullptr;p = p->next) // 一块将所有的都进行处理了，就不用后续在处理多余长度的了，
+			                                       //是因为下面INT_MAX的设置
 		{
 			int val1 = a == nullptr?INT_MAX:a->val;
 			int val2 = b == nullptr?INT_MAX:b->val;
-			if(a>b)
+			if(val1>val2)
 			{
 				p->next = b;
 				b = b->next;
@@ -28,19 +29,63 @@ public:
 		if(head == nullptr || head->next == nullptr)
 			return head;
 		ListNode *nextPairB = head,*lastPairE = head;
+		// 下面这段代码可以找到一个链表的中间位置，而不用全部遍历完整个链表
 		while(nextPairB->next && nextPairB->next->next)
 		{
 			nextPairB = nextPairB->next->next;// 两个两个的往下走
-			lastPairE = lastPairE->next;//指向上一对的最后，也是nextPairB前指针,为分成两段做准备
+			lastPairE = lastPairE->next;//指向的是中间
 		}
 		//lastPairE->next = nullptr;// 断开了，后面部分和前面部分 不能这么做。。
 		nextPairB = lastPairE;
-		lastPairE = lastPairE->next;
+		lastPairE = lastPairE->next; // 保存后半段
 		nextPairB->next = nullptr;  // 在只有两个的情况下，需要这样做
-
+		// 上面三行是个关键，怎样断开成两段，并保留下一段，这个本来是可以再用个变量来的，但是用已有的两个就搞定了
 		ListNode *L1 = sortList(head);// 前半部分（继续分下去）
 		ListNode *L2 = sortList(lastPairE);
 		return mergeTwo(L1,L2);
         
     }
 };
+
+// 若是数组的归并排序
+
+
+class Solution
+{
+private:
+	void mergeTwoArray(int a[],int start,int end,int mid,int temp[])
+	{
+		int i = start,j = mid + 1,m = mid ,n = end,t = 0;
+		while(i <= m && j <= n)
+		{
+			if(a[i] > a[j])
+			{
+				temp[t++] = a[j];
+				j++;
+			}
+			else{
+				temp[t++] = a[i];
+				i++;
+			}
+		}
+		while(i<=m)
+			temp[t++] = a[i++];
+		while(j<=n)
+			temp[t++] = a[j++];
+		for(int i = 0;i < t;i++)
+			a[start + i] = temp[i];  // 还要将其赋值回a中，保持连贯性
+
+	}
+public: void mergeArray(int a[],int start,int end,int temp[] )
+		{
+			if(start < end)
+			{
+				int mid = (start + end) / 2;
+				mergeArray(a,start,mid,temp);// 左半部分
+				mergeArray(a,mid+1,end,temp);//有半部分
+				mergeTwoArray(a,start,end,mid,temp);
+			}
+		}
+
+};
+//需要额外的空间来进行，链表结构的则不需要，归并排序时间效率高，比快排稳定
