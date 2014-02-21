@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int singleNumber(int A[], int n) {
+		const int sizebit = sizeof(int) * 8; // 一共的位数
+		int digit[sizebit]; // 我还在想怎么确定最长的一个数的位数呢。。结果就用最大了。。
+		fill_n(digit,sizebit,0);// 与fill 的区别，fill是一段，fill_n 是前n 个
+		int j = 0;
+		for(int i = 0;i < n;i++)
+		{
+			for(int j = 0;j < sizebit;j++)
+			{
+				digit[j] += (A[i] >> j) & 1;//把数组里面的每一个数依次向右然后与上1就得到当前数位的值了。。
+				digit[j] %= 3;
+			}
+		}
+		int result = 0;
+		for(int i = 0;i < sizebit;i++)
+			result += digit[i] << i; // 要按数位顺序排好，所以是左移相应的数位
+		return result ;
+        
+    }
+};
