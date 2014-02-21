@@ -1,0 +1,33 @@
+class Solution {
+private:
+	vector<vector<int>> results;
+	void dfs(vector<int> source,vector<int> result)
+	{
+		if(result.size() == source.size()) // 评判条件， 就被start end 什么的洗脑了。。
+			results.push_back(result);
+		else
+		{
+			for(int i = 0;i < source.size();i++) // 从0开始，要去遍历所有的元素
+			{
+				auto pos = find(result.begin(),result.end(),source[i]);
+				if(pos == result.end()) // 确保当前元素没有出现过
+				{
+					result.push_back(source[i]);
+					dfs(source,result);
+					result.pop_back();
+				}
+				
+			}
+		}
+	}
+		
+
+public:
+    vector<vector<int> > permute(vector<int> &num) {
+		vector<int> result;
+		if(num.size() >=1)
+			dfs(num,result);
+		return results;
+
+    }
+};
