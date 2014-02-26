@@ -1,0 +1,28 @@
+map 的用法，和利用下标进行计数的特性，注意这个性能可以相同字母，字符串的计数，这里只不过是先排序了让其变成相同下标而已，加
+了一个弯就不会了！！！
+
+class Solution {
+public:
+    vector<string> anagrams(vector<string> &strs) {
+        vector<string> result;
+        map<string,vector<string>> ref;
+		for(int i = 0;i < strs.size();i++)
+		{
+			string temp = strs[i];
+			sort(temp.begin(),temp.end());
+			ref[temp].push_back(strs[i]);
+		}
+		auto iter = ref.begin();
+		for(;iter != ref.end();iter++)
+		{
+			int size = (iter->second).size();
+			if(size > 1)
+			{
+				for(int i = 0;i < size;i++)
+					result.push_back((iter->second)[i]);
+			}
+		}
+      return result;
+        
+    }
+};
