@@ -1,0 +1,40 @@
+// 用深度搜索，一下子就想到了，可是中间的条件限制和细节处理，还是不会做。。
+class Solution {
+private:
+	vector<string> result;
+	void dfs(string s ,size_t start,int step,string mid)
+	{
+		if(s.size() == start  && step == 4) // 这个判断要在前面，且条件注意
+		{
+			mid.resize(mid.size()-1); // 最后面会多一个点
+			result.push_back(mid);
+			return;
+		}
+		if(s.size() - start > (4 - step) * 3) return;
+
+		if(s.size() - start < 4 - step) return;
+		// 上面两个是长度的限制
+		
+		int curNum = 0;
+		for(size_t i = start;i < start + 3;i++) // 注意这个指数限制,仅限三位数
+		{
+			curNum = curNum * 10 + (s[i] - '0');// 得到当前的数字，连续的方法
+			if(curNum < 256)
+			{
+				mid += s[i];
+				dfs(s,i + 1,step + 1,mid + '.');
+			}
+			if(curNum == 0)
+				break;  // 防止前缀为0 的字符，单个的可以，所以是放在后面来进行判断
+		}
+	}
+
+public:
+    vector<string> restoreIpAddresses(string s) {
+		string ip;
+		if(s.size() > 3)
+			dfs(s,0,0,ip);
+		return result;
+        
+    }
+};
