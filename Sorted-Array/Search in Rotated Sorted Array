@@ -1,0 +1,40 @@
+//很简单的题目，结果细节上竟然出错很多！！
+class Solution {
+private:
+	int binarySearch(int A[],int start,int end,int value)
+	{
+		if(start <= end)
+		{
+			int mid = (start + end) / 2;
+			if( value > A[mid])
+				binarySearch(A,mid+1,end,value);
+			else
+				if(value < A[mid])
+				binarySearch(A,start,mid-1,value);
+			else
+				if(value == A[mid])
+				return mid;
+		}
+		else
+			return -1;
+	}
+			
+public:
+    int search(int A[], int n, int target) {
+		int start = 0,end = n-1;
+		int pivot = 0;
+ 		for(int i = 1;i <= n -1;i++)
+		{
+			if(A[i-1] > A[i])
+			{
+				pivot = i-1;				
+				break;
+			}
+		}
+		if(A[start] <= target && A[pivot] >= target  )
+					end = pivot;
+				else
+					start = pivot + 1;	
+		return binarySearch(A,start,end,target);      
+    }
+};
