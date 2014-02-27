@@ -35,3 +35,35 @@ public:
        
     }
 };
+
+spiral II 跟上面的一样，相反而已，具体实现过程是一样的，想好整个布局即可
+class Solution {
+public:
+    vector<vector<int> > generateMatrix(int n) {
+		vector<vector<int>> result(n,vector<int>(n));
+		int beginX = 0,endX = n-1;
+		int beginY = 0,endY = n-1;
+		int t = 1;
+		while(t <= pow(n,n))
+		{
+			for(int j = beginY;j<= endY;j++)
+				result[beginX][j] = t++;
+			if(beginX ++ > endX)
+				break;
+			for(int i = beginX;i <= endX;i++)
+				result[i][endY] = t++;
+			if(endY -- < beginY)
+				break;
+			for(int j = endY;j>= beginY;j--)
+				result[endX][j] = t++;
+			if(endX -- < beginX)
+				break;
+			for(int i = endX;i >= beginX;i--)
+				result[i][beginY] = t++;
+			if(beginY++ > endY)
+				break;
+		}
+		return result;
+       
+    }
+};
