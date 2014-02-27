@@ -1,0 +1,30 @@
+  // 这个题很容易就想到要用到栈，但是将括号进栈是用来判断此字符串是否合法，不能去求长度
+  // 所以要想到将括号对应的位置进栈，然后通过栈的状态来判断maxlen 
+  // 用位置记数！！
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+		int maxlen = 0,bottom = -1;
+		stack<int> process;
+		for(int i = 0;i < s.size();i++)
+		{
+			if(s[i] == '(')
+				process.push(i);
+			else
+			{
+				if(process.empty())// 第一个可能出现合法的位置
+					bottom = i;
+				else
+				{
+					process.pop();// 一对消去
+					if(process.empty())
+						maxlen = max(maxlen,i - bottom);// 这样可以连续起来，不用判断连加或者如何
+					else
+						maxlen = max(maxlen,i - process.top());// 中间有括号的时候
+				}
+			}
+		}
+		return maxlen;
+        
+    }
+};
