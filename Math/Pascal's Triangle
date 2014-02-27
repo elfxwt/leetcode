@@ -21,3 +21,27 @@ public:
 		return results;       
     }
 };
+// 对于第二题，求第k 行的数字，一开始想用组合数来求，还以为可以用到O(k)的时间复杂度，结果人家题目只是说用O（k）的空间复杂度
+仍然是在上题的基础上，用组合数来求的时候，int 的和double 的都只能满足很小的数的阶乘，引申出另外一道题目，求任意数，或者100以
+内的数的阶乘，应该可以用数组来求吧。。
+// 倒着走才能不覆盖，才可以滚动起来，简单的逻辑却花了很长时间才做出来
+
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {		
+		vector<int> result(rowIndex+1);
+		if(rowIndex == 0)
+			result[0]=1;
+		else
+		{
+			result[1] = 1;//求第二行，即第k = 1的时候要先设置一下
+			for(int i = 1;i <= rowIndex;i++)
+				for(int j = i;j >0;j--) //这里要倒着走，才行							
+					{
+						result[j] = result[j-1] + result[j];				
+						result[0] = 1; 
+				}
+		}		
+       return result;
+    }
+};
