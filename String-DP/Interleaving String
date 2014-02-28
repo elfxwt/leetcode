@@ -1,0 +1,62 @@
+Step 1
+//首先是如此考虑的，发现当第一个字符在两个字符串都可以匹配的时候，会出现问题，因此想到要用递归，但是递归判断条件冗余
+//而且会超时，所以要考虑动态规划
+class Solution {
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+		size_t length = s3.size();
+		size_t length1 = s1.size();
+		size_t length2 = s2.size();
+		if(length1 + length2 != length)
+			return false;	
+		bool flag = true;
+		while(length--)
+		{
+			if(s3[0] == s1[0])   //  当相等的时候，就不能简单的这样处理，要去考虑它去截取第二个字符串的，所以这个时候
+				s1 = s1.substr(1);  // 考虑要用递归  
+			else
+				if(s3[0] == s2[0])
+					s2 = s2.substr(1);
+				else
+				{
+					flag = false;
+					break;
+				}
+				s3 = s3.substr(1);
+		}
+		return flag;
+        
+    }
+};
+
+step 2
+//动态规划的特点是你要写出一个状态转移方程来，也就是当前符合条件否是可以通过前一个状态和一个判定条件决定的，也就是说有
+//一个连续性的特点，关键便是找到这个判断条件
+
+class Solution {
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+		size_t length = s3.size();
+		size_t length1 = s1.size();
+		size_t length2 = s2.size();
+		if(length1 + length2 != length)
+			return false;	
+		vector<vector<bool>> f(s1.size() + 1,vector<bool>(s2.size() + 1,true));
+
+		for(int i = 1;i <= s1.size();i++)
+			f[i][0] = f[i-1][0] && (s1[i-1] == s3[i-1]); // 只看s1是否匹配s3,一维DP
+
+		for(int j = 1;j <= s2.size();j++)
+			f[0][j] = f[0][j-1] && (s2[j-1] == s3[j-1]);// 只看s2是否匹配s3，一维DP
+
+		for(int i= 1;i <= s1.size();i++)
+			for(int j = 1;j <= s2.size();j++)
+			   f[i][j] = (s1[i-1] == s3[i+j -1] && f[i-1][j]) ||
+			              (s2[j-1] == s3[i+j-1] && f[i][j-1]);                 // 二维ＤＰ
+
+		return f[s1.size()][s2.size()];
+        
+    }
+};
+
+由于是自己照着别人的意思来写着，所以细节漏洞百出
