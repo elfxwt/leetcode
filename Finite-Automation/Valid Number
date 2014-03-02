@@ -1,0 +1,53 @@
+// be sure of the inputs and the states,and the convert change , list the two dimensions array to record the convert 
+
+class Solution {
+public:
+    bool isNumber(const char *s) {
+        enum inputType {
+			Invalid,
+			Space,
+			Signal,
+			Digit,
+			Dot,
+			Exponent
+		};
+		int convert[][6] ={
+			-1,0,3,1,2,-1,          // 状态0 第一个字符
+			-1,8,-1,1,4,5,                       // 状态1 小数点前的数字
+			-1,-1,-1,4,-1,-1,						// 状态2 小数点
+			-1,-1,-1,1,2,-1,						// 状态3 正负号
+			-1,8,-1,4,-1,5,						// 状态4 小数点后的数字或者是数字后面的小数点     这个和状态1比较难想到  “3.” 这个是正确的！！ 
+		    -1,-1,6,7,-1,-1,                        // state 5 e 
+			-1,-1,-1,7,-1,-1,						// state 6 signal after e
+			-1,8,-1,7,-1,-1,						// state 7 digit after e   this two states about e
+			-1,8,-1,1,2,-1,						// state 8 space “1 4” false  " 4" false too?  "43e6 -.9" false 
+
+    };
+		int state = 0;
+		while(*s != '\0') //每次都写错！！
+		{
+			inputType input = Invalid; // enum variable 
+			if(isspace(*s))
+				input = Space;
+			else
+				if(isdigit(*s))       // use the current function
+					input = Digit;
+				else
+					if(*s == '.')
+						input = Dot;
+					else
+						if(*s == 'e'|| *s == 'E')
+							input = Exponent;
+						else
+							if(*s == '+' || *s == '-')
+								input = Signal;
+			state = convert[state][input];
+			if(state == -1)
+				return false;
+			else
+				s++;
+		}
+		return state == 1|| state == 4 || state == 7 || state == 8;  
+	}
+
+};
