@@ -1,0 +1,31 @@
+好多类似的题目，要总结一下~~
+
+class Solution {
+private:
+	vector<vector<int>> results;
+	void dfs(int start,vector<int> s,vector<int> &result)
+	{
+		/*if(start == s.size())
+		{
+			results.push_back(result);
+			return;
+		}*/
+		// 可以把这个放到下面来
+		for(int i = start;i< s.size();i++)
+		{
+			result.push_back(s[i]);
+		    results.push_back(result);
+			dfs(i+1,s,result);//
+			result.pop_back();
+		}
+	}
+
+public:
+    vector<vector<int> > subsets(vector<int> &S) {
+		vector<int> result;
+		sort(S.begin(),S.end());
+		results.push_back(result);// 空子集
+		dfs(0,S,result);
+		return results;
+    }
+};
