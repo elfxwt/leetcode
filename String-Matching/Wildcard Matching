@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool isMatch(const char *s, const char *p) {
+		const char *star = NULL;
+		const char *temPre = s;
+		while(*s)
+		{
+			if(*p == *s ||*p == '?')
+			{
+				s++;
+				p++;
+				continue;
+			}
+			if(*p == '*') // 先当空来处理，只有后面的值不相等的时候在将其当字符处理
+			{
+				star = p++;// 记下*的位置
+				temPre = s;//也记下对应的s的字符位置
+				continue;
+			}
+			// 走到这一步就说明*p != *s 看前面是否有star存在
+			if(star)
+			{
+				p = star + 1;
+				s = ++temPre;
+				/*while(*(++s) == *temPre)
+					temPre++;
+				star = NULL;*/
+				continue;
+			}
+			return false;
+		}
+		while(*p == '*') p++;
+		return !*p;  // baad b*c 的情况下，p 不会到头，所以会返回false
+
+	}
+
+};
