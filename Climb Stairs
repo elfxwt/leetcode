@@ -1,0 +1,31 @@
+ // 斐波那契数列
+ f(n) = f(n-1) + f(n - 2)
+ // 但是会超时
+ 
+ class Solution {
+
+public:
+    int climbStairs(int n) {
+		if(n <= 2)
+			return n;
+		return climbStairs(n - 2) +climbStairs(n - 1);
+        
+    }
+};
+
+class Solution {
+
+public:
+    int climbStairs(int n) {
+		int cur = 1;
+		int pre = 0;
+		for(int i = 1;i <= n;i++)
+		{
+			int temp =  cur;
+			cur = temp + pre;
+			pre = temp;
+		}
+		return cur;
+        
+    }
+};
