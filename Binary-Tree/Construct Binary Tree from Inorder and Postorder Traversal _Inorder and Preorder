@@ -1,0 +1,69 @@
+递归的想法，注意递归里面的参数，什么条件下如何进行
+
+class Solution {
+private:
+	TreeNode *construct(vector<int> &inorder,int ibegin,int iend,vector<int> &postorder,int pbegin,int pend)
+	{
+		if(pbegin > pend)
+			return nullptr;
+		if(pbegin == pend)   // 这个条件我确定不了，
+			return new TreeNode(postorder[pend]);
+	/*	auto pos = find(inorder.begin(),inorder.end(),preorder[pbegin]);
+		int size = distance(inorder.begin(),pos);
+*/
+		int i = ibegin;
+		while(i < iend)  // 只能用这种方法去确定那个pos ,不用find 去找，用迭代器反而麻烦
+		{
+			if(inorder[i] == postorder[pend])
+				break;
+			i++;
+		}
+		TreeNode *root = new TreeNode(postorder[pend]);
+		if(i > ibegin)
+			root->left = construct(inorder,ibegin,i-1,postorder,pbegin,pbegin + i - ibegin-1);
+		if(i < iend)
+			root->right = construct(inorder,i+1,iend,postorder,pbegin + i - ibegin,pend-1);
+		return root;
+	}
+			
+public:
+    TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder) {
+		return construct(inorder,0,inorder.size()-1,postorder,0,postorder.size()-1);
+		    
+    }
+};
+
+
+//知道要用递归去做，但是确定不了中间的条件，也就是不清楚里面的参数问题，从而得不到完整的式子
+class Solution {
+private:
+	TreeNode *construct(vector<int> &preorder,int pbegin,int pend,vector<int> &inorder,int ibegin,int iend)
+	{
+		if(pbegin > pend)
+			return nullptr;
+		if(pbegin == pend)   // 这个条件我确定不了，
+			return new TreeNode(preorder[pbegin]);
+	/*	auto pos = find(inorder.begin(),inorder.end(),preorder[pbegin]);
+		int size = distance(inorder.begin(),pos);
+*/
+		int i = ibegin;
+		while(i < iend)  // 只能用这种方法去确定那个pos ,不用find 去找，用迭代器反而麻烦
+		{
+			if(inorder[i] == preorder[pbegin])
+				break;
+			i++;
+		}
+		TreeNode *root = new TreeNode(preorder[pbegin]);
+		if(i > ibegin)
+			root->left = construct(preorder,pbegin+1,pbegin + i - ibegin ,inorder,ibegin,i-1);
+		if(i < iend)
+			root->right = construct(preorder,pbegin + i - ibegin+1,pend,inorder,i+1,iend);
+		return root;
+	}
+			
+public:
+    TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
+		return construct(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);
+		    
+    }
+};
