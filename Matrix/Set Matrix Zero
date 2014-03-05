@@ -1,0 +1,79 @@
+)(1) 的空间
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int> > &matrix) {			
+		int n = matrix.size();
+		int m = matrix[0].size();
+		bool row_has_zero = false;
+		bool colm_has_zero = false;
+		for(int i = 0;i < n;i++)
+		{
+			if(matrix[i][0]==0)
+			{
+				row_has_zero = true;
+				break;
+			}
+		}
+		for(int j = 0;j < m;j++)
+			if(matrix[0][j] == 0)
+			{
+				colm_has_zero = true;
+				break;
+			}
+
+		for(int i = 1;i < n;i++)
+			for(int j = 1;j < m;j++)
+			{
+				if(matrix[i][j] == 0)
+				{
+					matrix[0][j] = 0;
+					matrix[i][0] = 0;
+				}
+			}
+			for(int i = 1;i < n;i++)
+				for(int j = 1;j < m;j++)
+					if(matrix[0][j] == 0 || matrix[i][0] == 0)
+						matrix[i][j] = 0;
+			if(row_has_zero)
+			{
+				for(int i = 0;i < n;i++)
+					matrix[i][0] = 0;
+			}
+			if(colm_has_zero)
+				fill_n(matrix[0].begin(),m,0);
+			
+
+    }
+};
+
+// Timeout ,虽然用了O（m）的空间，但是。。。时间复杂度超了
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int> > &matrix) {			
+		int n = matrix.size();
+		int m = matrix[0].size();
+		bool flag = false;
+		vector<int> column;
+		for(int i = 0;i < n;i++)
+		{
+			for(int j = 0;j< m;j++)
+			{
+				if(matrix[i][j] == 0)
+				{
+					if(!binary_search(column.begin(),column.end(),j))
+						column.push_back(j);
+						flag = true;  //标志是跟有没有0有关系，而不是在赋值的时候有关系
+				}
+			}
+			if(flag)
+				fill_n(matrix[i].begin(),m,0); // memset 不如fill_n 好用不知道这样行不行
+			flag = false;
+			sort(column.begin(),column.end());
+		}
+		for(int j = 0;j< column.size();j++)
+			for(int i = 0;i < n;i++)
+			matrix[i][column[j]] = 0;
+    }
+};
