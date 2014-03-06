@@ -1,0 +1,46 @@
+ // 该暴力的时候就要暴力，注意map 的使用！
+class Solution {
+public:
+    int maxPoints(vector<Point> &points) {
+		int result = 0;
+		if(points.size() < 2)
+			return points.size();
+		map<float,int> slops;
+		
+		for(int i = 0;i < points.size();i++)
+		{
+			slops.clear();// 每次要进行斜率的清空，是为了防止累加，但是上一次的最大值已经算出来了，这个值会保留
+			slops[INT_MAX] = 0; // 这里面一定要保证有一个结点，否则（0,0） （0,0）这样的不会过
+			int maxNum = 0;
+			int samepoints = 0;
+			int xzeroNum = 0;
+			for(int j = i+1;j < points.size();j++) // 从i+1 开始，避免不重复的计算
+			{
+				float dx = (points[j].x- points[i].x);
+				float dy =  (points[j].y - points[i].y); 
+				if(dx == 0 && dy == 0)
+					samepoints++;
+				else
+					if(dx !=0)
+					{
+						float slop = 0.1 * dy / dx;// 学了一招浮点数的表达
+						slops[slop]++;
+					}
+				else
+					xzeroNum ++;// 与y轴平行的线
+					
+			}
+			auto iter = slops.begin();
+			for(;iter != slops.end();iter++)
+			{
+				if(iter->second + samepoints> maxNum)
+					maxNum = iter->second + samepoints ;
+			}
+			if(maxNum <xzeroNum )
+				maxNum = xzeroNum;
+			result = max(result,++maxNum);
+
+		}		
+		return result ;   
+    }
+};
