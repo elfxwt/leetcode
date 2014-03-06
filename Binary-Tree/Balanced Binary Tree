@@ -1,0 +1,21 @@
+又是知道用递归，但是不知道细节怎么处理的，注意那个剪枝条件！！
+
+class Solution {
+private:
+	int depth(TreeNode *node)
+	{
+		if(node == nullptr)
+			return 0;
+		int ld = depth(node->left);
+		int rd = depth(node->right);
+		if(ld < 0|| rd<0||abs(ld - rd) > 1) // 这个条件很重要！过程中如果出现-1就永远-1了，否则只有abs,会抹杀掉子树不符合条件的情况
+			return -1;	   // 称之为剪枝了。。
+		return max(ld,rd) + 1;
+	}
+
+public:
+    bool isBalanced(TreeNode *root) {
+		return depth(root) >=0;
+        // 因为上面的条件，所以就不用再来一个循环？！
+    }
+};
