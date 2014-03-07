@@ -1,0 +1,27 @@
+// 这个题不算是DFS，是一个简单的找规律的题目，重点是 字典排序，从最后面开始思考，一步步推进的过程，注意细节实现
+// 放在这里面只是为了和permutation 的实现相结合，排列是要重点掌握的，注意思想
+
+class Solution {
+public:
+    void nextPermutation(vector<int> &num) {
+		if(num.size() > 1)
+		{
+			bool flag = false;
+			int i = num.size()-2;
+			for(;i>=0;i--)
+			{
+				int j = num.size() -1;
+				for(;j > i;j--)
+				if(num[j] > num[i])
+				{
+					swap(num[i],num[j]);
+					flag = true;
+					break;
+				}
+				if(flag)				
+					break;
+			}
+			sort(num.begin() +i+1,num.end());
+		}		
+	}
+};
