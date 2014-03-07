@@ -17,3 +17,28 @@ public:
 		return len;
     }
 };
+
+// allow the elements have two duplicats  then have the other variable to record it 
+
+class Solution {
+public:// 这其实是一个数组滑动的概念，数组可以一边被读取，一边将走过的地方进行改动
+    int removeDuplicates(int A[], int n) {
+		if(n <=2)
+			return n;
+		int ppre = A[0];
+		int pre = A[1];
+		int len = 2;
+		for(int i = 2;i<n;i++)
+		{
+			if(A[i] != pre)
+				A[len++] = A[i];
+			else
+				if(pre != ppre)
+					A[len++] = A[i];
+			ppre = pre;
+			pre = A[i];
+		}
+		return len;
+        
+    }
+};
