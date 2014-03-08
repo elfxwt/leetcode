@@ -1,0 +1,14 @@
+// 注意这个是三角形架构的，三角形架构有一定的特点的！！
+
+class Solution {
+public:
+    int minimumTotal(vector<vector<int> > &triangle) {
+		int rowNum = triangle.size();
+		// 三角形的顶点处一定是路径的终点，从下往上考虑，在最上面就是结果
+		for(int i = rowNum - 2;i >= 0;i--) 
+			for(int j = 0;j < i + 1;j++)   // 这应该是三角形的特点
+				triangle[i][j] += min (triangle[i+1][j], triangle[i+1][j+1]);
+		return triangle[0][0];
+
+    }
+};
