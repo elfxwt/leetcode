@@ -1,0 +1,47 @@
+// 这道题目有多种方法，ＤＦＳ是比较简洁的一种，时间复杂度是　Ｏ（２＾ｎ）
+class Solution {
+private:
+	vector<vector<string>> results;
+	void dfs(int start,string s,vector<string> result)
+	{
+		if(start == s.size())
+		{
+			results.push_back(result);
+			return;
+		}
+		for(int i = start;i< s.size();i++)
+		{
+			if(isPalindrome(s,start,i))// 这里相当于其他的剪枝，判断当前的是否为回文
+			{
+				result.push_back(s.substr(start,i - start + 1));
+				dfs(i+1,s,result);// 进行下一个，是划分的概念，有重复的话就是i,不是i+1
+				result.pop_back();
+			}
+
+		}
+
+
+	}
+		bool isPalindrome(string source,int start,int end)  // 有开始和结尾标志信息的回文判断，很好判断
+		{
+			while(start<end)
+			{
+				if(source[start] != source[end])
+					return false;
+				start++;
+				end --;
+			}
+			return true;
+		}
+public:
+    vector<vector<string>> partition(string s) {	
+		vector<string> result;
+		if(s.size() > 0)
+		{
+			dfs(0,s,result);
+		}
+		return results;
+			
+        
+    }
+};
