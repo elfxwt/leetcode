@@ -1,0 +1,29 @@
+// be sure of the final solution and the iterat details then accepted for one time 
+class Solution {
+	vector<vector<int>> results;
+	void dfs(int start ,int n,int k,vector<int> result)
+	{
+		if(result.size() == k)
+		{
+			results.push_back(result);
+			return;
+		}
+		if(start == n+1)
+		    return;
+		for(int i = start;i <= n;i++)
+		{
+			result.push_back(i);
+			dfs(i+1,n,k,result);
+			result.pop_back();
+		}
+	}
+
+public:
+    vector<vector<int> > combine(int n, int k) {
+		vector<int> result;
+		if(n >= k)
+			dfs(1,n,k,result);
+		return results;
+        
+    }
+};
