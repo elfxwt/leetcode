@@ -1,0 +1,47 @@
+时间复杂度要求O（lgn） ,感觉自己实现的这个超时了。。。
+
+class Solution {
+private:
+	void binarySearch(int start,int end,int target,int A[],vector<int> &result)
+	{
+		if(start <= end)
+		{
+			int mid = (start + end) / 2;
+			if(A[mid] < target)
+				binarySearch(mid + 1,end,target,A,result);
+			else
+				if(A[mid] > target)
+					binarySearch(start,mid-1,target,A,result);
+				else
+				{						
+					result.push_back(mid);
+					binarySearch(start,mid-1,target,A,result);
+					binarySearch(mid+1,end,target,A,result);
+				}
+			}
+	}
+
+public:
+    vector<int> searchRange(int A[], int n, int target) {
+		vector<int> result;
+		binarySearch(0,n-1,target,A,result);
+		if(result.size() == 0) // 目标没有找到时，返回-1-1
+		{
+			result.push_back(-1);
+			result.push_back(-1);
+		}
+		else
+			if(result.size() == 1)  // 只有一个数的时候，要返回两个相同的值
+				result.push_back(result[0]);
+		else
+		{
+			sort(result.begin(),result.end());  // 这样一来就是 O（logn + n）的效率了吧。。。怎么优化。。
+			int begin = result[0];
+			int end = result[result.size() - 1];
+			result.clear();
+			result.push_back(begin);
+			result.push_back(end);
+		}	
+		return result;   
+    }
+};
