@@ -1,0 +1,147 @@
+//BFS  广度遍历的例子，注意其中可以从a-> z的替换，还有两个队列的应用，一个map和一个set的应用，用空间换时间
+
+class Solution {
+public:
+   int ladderLength(string start, string end, set<string> &dict){
+		queue<string> current,next;
+		unordered_map<string,string> record; // 记录dict里面的键是由哪个单词转换而来的。感觉在这里没有用到，但是如果要输出最短路径就用到了
+		unordered_set<string> visited;// 访问过的字符串存储下来
+		bool flag = false; // 找到了就终止，因为是广度，所以可以保证是最短
+		int level = 0;
+		current.push(start); // 从第一个开始，第一层上
+
+		while(!current.empty() && !flag)
+		{
+			level++; 
+			while(!current.empty() && !flag) // 保证next层里面的数都穷
+			{
+			string curWord (current.front()); // 第一个单词出队，开始找下家
+			current.pop();
+			for(int i = 0;i < curWord.size();i++) // 按个字符进行替换
+			{
+				for(char c = 'a';c <= 'z';c++) // 这是题目中告诉你都是小写字母的原因，你可以从所有的小写字母中替换，是否可以优化，从dict里面取单词
+				{
+					string subWord (curWord);
+					if(c == subWord[i])
+						continue;
+					subWord[i] = c;
+					if(subWord == end)
+					{
+						flag = true;
+						record[subWord] = curWord;// 为了存储最短路径来的，本题目中可以不用
+						break;
+					}
+					if(dict.count(subWord) > 0 && visited.count(subWord) == 0)
+					{
+						next.push(subWord);// 下一层开始从这个队列开始，这里可能会放很多单词， hot ,cit hig 
+						visited.insert(subWord);
+						record[subWord] = curWord;  // 为了存储最短路径来的，本题目中可以不用
+					}
+				}
+			}
+			}
+			swap(next,current);
+		}
+		if(flag)
+			return level+1;
+		else
+			return 0;
+   }
+
+};
+
+没有AC的答案，连mutimap 都用上了。。
+
+class Solution {
+public:
+   vector<vector<string>> findLadders(string start, string end, set<string> &dict) {
+		queue<string> current,next;
+		multimap<string,string> record; // 记录dict里面的键是由哪个单词转换而来的。感觉在这里没有用到，但是如果要输出最短路径就用到了
+		vector<vector<string>> results;
+		vector<string> result;
+		unordered_set<string> visited;// 访问过的字符串存储下来
+		bool flag = false; // 找到了就终止，因为是广度，所以可以保证是最短
+		int level = 0;
+		current.push(start); // 从第一个开始，第一层上
+
+		while(!current.empty() && !flag) // 保证同一层没有flag，这样可以保证输出的都是同样距离的
+		{
+			level++; 
+			while(!current.empty()) // 保证next层里面的数都穷尽,且此时不能再设flag作条件
+			{
+			string curWord (current.front()); // 第一个单词出队，开始找下家
+			current.pop();
+			for(int i = 0;i < curWord.size();i++) // 按个字符进行替换
+			{
+				for(char c = 'a';c <= 'z';c++) // 这是题目中告诉你都是小写字母的原因，你可以从所有的小写字母中替换，是否可以优化，从dict里面取单词
+				{
+					string subWord (curWord);
+					if(c == subWord[i])
+						continue;
+					subWord[i] = c;
+					if(subWord == end)
+					{
+						flag = true;
+						//record.insert(make_pair(subWord,curWord));// 能想到end可能会有多个，就应该要想到中间结果也有可能出现多个！
+						result.push_back(end);
+						result.push_back(curWord);
+						iter(curWord,result,record,results,start);
+						result.clear();
+						//getResult(record,results,end,start,curWord);
+						break;
+						// 这里就不break l,让其继续循环
+					}
+					if(dict.count(subWord) > 0 )
+					{
+						next.push(subWord);// 下一层开始从这个队列开始，这里可能会放很多单词， hot ,cit hig 
+						visited.insert(subWord);
+						record.insert(make_pair(subWord,curWord));  // 为了存储最短路径来的，本题目中可以不用
+					}
+				}
+			}
+			}
+			swap(next,current);// 用交换，可以保持next每次都为空，current得到相应的值
+		}
+		return results;
+   }
+
+  /* void getResult(multimap<string,string> record,vector<vector<string>> &results,string end,string start,string preEnd)
+   {
+	   vector<string> result;
+	   vector<string> finalR;
+	   string keyStr = end;	
+	   result.push_back(end);
+	   while(record[keyStr] != start)
+	   {
+		   result.push_back(record[keyStr]);
+		   keyStr = record[keyStr];
+	   }
+	   result.push_back(start);
+	   auto iter = result.rbegin();
+	   for(;iter != result.rend();iter++)
+		   finalR.push_back(*iter);
+	   results.push_back(finalR);	   
+   }*/
+   void iter(string keyString,vector<string> &result,multimap<string,string> record,vector<vector<string>> &results,string start)
+   {
+	   auto beg = record.lower_bound(keyString);
+	   auto end = record.upper_bound(keyString);
+	   
+	   while(beg != end)
+	   {
+		   string temString = beg->second;
+		   result.push_back(temString);
+		   if(temString == start)
+		   {
+			    reverse(result.begin(),result.end());
+				results.push_back(result);
+				return;
+		   }	   
+		   iter(temString,result,record,results,start);
+		   result.pop_back();
+		   ++beg;
+	   }
+	  
+   }
+};
+
