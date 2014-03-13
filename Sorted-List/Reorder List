@@ -1,0 +1,44 @@
+// 两个小时。。。才搞定，感觉其实就是考了一个链表逆序的问题，有头结点和无头结点好像也没啥不同的
+class Solution {
+public:
+    void reorderList(ListNode *head) {
+		ListNode *p = head,*m = head;
+		int len = 0;
+		while(p)
+		{
+			p = p->next;
+			len++;
+		}
+		if(len > 2)
+		{
+			p = head;
+			len = len /2;
+			while(len--)
+				p = p->next;
+			ListNode *pre = p;
+			p = p->next;
+			pre->next = nullptr;
+			ListNode *n = p,*cur = p; // 逆序的思维还是不严密，最后返回的是cur	
+			p=p->next;
+			ListNode *postp =p == nullptr? p:p->next; // 注意要进行检查！！
+			cur->next = nullptr;// 防止循环起来，这个是否跟头结点有关系呢？
+			while(p) // 逆序链表  -----> important 
+			{
+				p->next = cur;
+				//cur->next = nullptr;
+				cur = p;
+				p = postp;
+				postp = postp==nullptr? nullptr:postp->next; // 这样的检查很重要
+			}
+			while(m!= nullptr && cur != nullptr) // 按个插入
+			{
+				ListNode *postm = m->next;
+				ListNode *postcur = cur->next;
+				m->next = cur;
+				cur->next = postm;
+				m = postm;
+				cur = postcur;
+			}      
+		}
+	}
+};
