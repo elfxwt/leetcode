@@ -1,0 +1,38 @@
+// 代码太长了。。。而且不符合要求。。。。
+
+class Solution {
+public:
+    void sortColors(int A[], int n) {
+		int redNum = 0;
+		int whiteNum = 0;
+		int blueNum = 0;
+		for(int i = 0;i < n;i++)
+		{
+			switch (A[i])
+			{
+
+			case 0:
+				redNum++;
+				break;
+			case 1:
+				whiteNum ++;
+				break;
+			case 2:
+				blueNum ++;
+				break;
+			default:
+				break;
+
+			}
+		}
+		int j = 0;
+		for(;j < redNum;j++)
+			A[j] = 0;
+		int p = j;
+		for(;p < j+whiteNum;p++)  // 这里的下标要注意
+			A[p] = 1;
+		int q = p;
+		for(;q < blueNum +p ;q++)
+			A[q] = 2;     
+    }
+};
