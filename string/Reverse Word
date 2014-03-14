@@ -1,0 +1,32 @@
+// 历时一个小时。。。最新一道题目151.。。
+class Solution {
+public:
+    void reverseWords(string &s) {
+		vector<string> source;
+		string temp;
+		for(int i = 0;i < s.size();i++)  // 没有用提供的函数 strtok,自己写的
+		{
+			if(s[i] != ' ')
+				temp +=s[i];
+			else
+			{
+				if(temp!="")
+				source.push_back(temp);
+				temp.clear();
+			}
+		}
+		s.clear();
+		if(temp !="")
+			source.push_back(temp); // "   "-> ""  "A"->"A"  " a->"a"  "the is!"  " 1"
+		auto iter = source.rbegin();
+		bool flag = true;
+		for(;iter != source.rend();iter++)  // 这个间隔写法！！
+		{			
+			if(flag)
+				flag = false;
+			else
+				s+=' ';
+			s += *iter;		
+		}	
+    }
+};
