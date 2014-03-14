@@ -1,0 +1,39 @@
+// about two hours ,当处理繁琐的时候，应该去考虑设置更多的变量去记录全面的信息
+
+class Solution {
+public:
+    vector<Interval> insert(vector<Interval> &intervals, Interval newInterval) {
+		int firstIndex = -1;
+		int lastIndex = -1;
+		int greater = -1;
+		int smaller = -1;
+		vector<Interval> result;
+		for(int i = 0;i < intervals.size();i++)// 从这个遍历中应该去获知更多信息
+		{
+			if(intervals[i].start <= newInterval.start && intervals[i].end >= newInterval.start)
+				firstIndex = i;
+			if(intervals[i].end >= newInterval.end && intervals[i].start <= newInterval.end)
+				lastIndex = i;
+			if(intervals[i].end < newInterval.start)
+				greater = i;
+			if(intervals[i].start >newInterval.end)
+			{
+				smaller = i;
+				break;            //  直接剪掉就好了！！注意这里可以break
+			}
+		}
+		if(greater != -1) // 前面保留的处理
+			for(int i = 0;i <= greater;i++)
+				result.push_back(intervals[i]);
+		// 中间的处理
+		int startVal = firstIndex == -1? newInterval.start:intervals[firstIndex].start;
+		int endVal = lastIndex == -1? newInterval.end:intervals[lastIndex].end;
+		Interval *tem1 = new Interval(startVal,endVal);
+		result.push_back(*tem1);
+	
+		if(smaller != -1)  // 后面保留的处理
+			for(int i = smaller;i < intervals.size();i++)
+				result.push_back(intervals[i]);
+		return result;
+	}		
+};
