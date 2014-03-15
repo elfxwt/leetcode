@@ -1,0 +1,29 @@
+//从下往上递减就好了么。。还去找什么n 与string 的关系。。。
+
+class Solution {
+public:
+    string countAndSay(int n) {
+		int count = 0;
+		string result;
+		string s("1");
+		while(--n)                // 其实这个算是个DP
+		{
+			char pre = s[0];
+			for(int i = 1;i <= s.size();i++)
+			{
+				count++;
+				if(i == s.size()|| s[i] != pre )
+				{
+					result.push_back('0'+count);
+					result.push_back(pre);
+					count = 0;
+					if(i < s.size())
+						pre = s[i];
+				}	
+			}
+			s = result;
+			result.clear();
+		}
+		return s;        
+    }
+};
