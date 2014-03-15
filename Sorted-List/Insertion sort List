@@ -1,0 +1,25 @@
+// 其实我这个应该算是选择排序，而不是插入排序。。。。
+
+class Solution {
+public:
+    ListNode *insertionSortList(ListNode *head) {
+		ListNode *iterM = head;
+		while(iterM)
+		{
+			ListNode *min = iterM;
+			ListNode *iter = iterM;
+			ListNode *iterhead = iterM;
+			while(iter)
+			{
+				if(iter->val < min->val)
+					min = iter;
+				iter = iter->next;
+			}
+			int temp = iterhead->val;
+			iterhead->val = min->val;  // 这里只不过换了相应结点的值，没有实现插入操作，严格意义上不算插入排序
+			min->val = temp;
+			iterM = iterM->next;
+		}
+		return head;
+	}
+};
