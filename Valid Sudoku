@@ -1,0 +1,58 @@
+// 看错题目了，好郁闷。。。费了很长时间，九宫格那里又看错，以为是任意重复的九宫格，实际上只有不重复的九宫格即可。。。
+// 学习check 的写法，用bool 变量直接得到答案
+
+
+class Solution {
+private:
+	bool check(char test,bool *flag)   // 学习这个
+	{
+		if(test == '.')
+			return true;
+		if(flag[test-'1'])
+			return false;
+		flag[test-'1'] = true;
+		return true;
+	}
+
+			
+public:   // 一开始想复杂了，或者是只要满足这样条件的，就是valid?
+    bool isValidSudoku(vector<vector<char> > &board) {
+		bool flag[9];
+		for(int i = 0;i < 9;i++)
+		{
+			fill_n(flag,9,false);
+			for(int j = 0;j < 9;j++)
+				if(!check(board[i][j],flag))
+					return false;
+
+			fill_n(flag,9,false);
+
+			for(int m = 0;m < 9;m++)
+				if(!check(board[m][i],flag))
+					return false;
+
+
+		}
+		// 太坑爹了，读错题目了，不是任意一个九宫格，而是就是不重复的九宫格
+		/*for(int i = 0;i < 7;i++)
+			for(int j = 0;j < 7;j++)
+			{
+				fill_n(flag,9,false);
+				for(int q = i;q < i + 3;q++)
+					for(int p = j;p < j+3;p++)		
+						if(!check(board[q][p],flag))
+							return false;
+			} */
+		for(int i = 0;i < 3;i++)
+			for(int j = 0;j < 3;j++)
+			{
+				fill_n(flag,9,false);
+				for(int c = j*3;c < j*3 + 3;c++)
+					for(int r = i*3;r < i*3 + 3;i++)
+						if(!check(board[c][r],flag))
+							return false;
+			}
+
+		return true;
+    }
+};
