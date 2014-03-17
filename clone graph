@@ -1,0 +1,29 @@
+这个题目的问题看得有点奇怪，一直不知道输入如何，输出如何，但是归根结底是对广度优先遍历和深度优先遍历的考察
+
+class Solution {
+private:
+	UndirectedGraphNode* clone(UndirectedGraphNode* original,unordered_map<UndirectedGraphNode*,UndirectedGraphNode*> &results)
+	{
+		if(results.count(original) > 0)
+			return results[original];
+		UndirectedGraphNode *newNode = new UndirectedGraphNode(original->label);
+		results[original] = newNode;
+		for(auto ngb:original->neighbors)
+			newNode->neighbors.push_back(clone(ngb,results));
+		return newNode;
+	}
+
+public:
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+		if(node != NULL)
+		{
+
+			unordered_map<UndirectedGraphNode*,UndirectedGraphNode*> results;
+
+			clone(node,results);
+			return results[node]; // 用映射关系来的
+		}
+		return node;
+        
+    }
+};
