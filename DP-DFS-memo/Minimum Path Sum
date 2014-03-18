@@ -1,0 +1,44 @@
+// 将memo 方法实现了一遍，通过这个题目，对于DP，ＤＦＳ和memo方法了解得更深刻了，不过。。希望下次碰到类似的题目可以会分析！！
+
+
+class Solution {
+private:
+	vector<vector<int>> result;
+	int dfs(int row,int col,vector<vector<int>> &gird)
+	{
+		if(row < 0 || col < 0)
+			return INT_MAX;  // 之所以没有想到这个，是因为return 的形态不对
+		if(row == 0 && col == 0)
+			return gird[row][col];
+		/*if(row == 0)
+			return dfs(row,col-1,gird,sum + gird[row][col-1]);
+		if(col == 0)
+			return dfs(row-1,col,gird,sum+gird[row-1][col]);*/   
+		return min(getNextValue(gird,row-1,col),getNextValue(gird,row,col-1)) + gird[row][col];  // 返回的形式就是状态方程
+	}
+	int getNextValue(vector<vector<int>> &grid,int x,int y)
+	{
+		if(x <0 ||y < 0)
+			return INT_MAX;
+		if(result[x][y] > -1)
+			return result[x][y];
+		return result[x][y]=dfs(x,y,grid);
+	}
+
+
+public:
+    int minPathSum(vector<vector<int> > &grid) {
+		int m = grid.size();
+		int n = grid[0].size();
+		
+		result = vector<vector<int>> (m,vector<int>(n,-1)); // 这种赋值方式！！
+
+		return dfs(m-1,n-1,grid);  // 倒着走是为了简便参数
+        
+    }
+};
+
+// 提供一种其他方式，DP + 滚动数组
+可以减少空间复杂度 O（n2）-> O(n) 
+
+f[j] = min(f[j-1],f[j])) + grid[i][j];   
