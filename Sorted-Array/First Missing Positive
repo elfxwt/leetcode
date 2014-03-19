@@ -1,0 +1,23 @@
+// Bucket Sort ! O(n)的方式，这里利用了交换并不是严格意义上的桶排序，由此题引申到桶排序
+// 费了很大劲，look the answer...
+
+
+class Solution {
+public:
+    int firstMissingPositive(int A[], int n) {
+		// 有一种排序是将其放在跟下标一致的位置上的--》 桶排序
+
+		for(int i = 0;i < n;)
+		{
+			if(A[i] > 0 && A[i]< n &A[A[i]] != A[i])
+				swap(A[A[i]],A[i]);
+			else
+				i++;
+		}
+		for(int j = 1;j < n;j++)
+			if(A[j] != j)
+				return j;
+		return A[0]==n? n+1:n;  // n 是排外的元素，A[1]之后 都是排好序的且与下标一致的
+	
+    }
+};
