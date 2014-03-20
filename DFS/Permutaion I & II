@@ -1,0 +1,108 @@
+class Solution {
+private:
+	vector<vector<int>> results;
+	void dfs(vector<int> source,vector<int> result)
+	{
+		if(result.size() == source.size()) // 评判条件， 就被start end 什么的洗脑了。。
+			results.push_back(result);
+		else
+		{
+			for(int i = 0;i < source.size();i++) // 从0开始，要去遍历所有的元素
+			{
+				auto pos = find(result.begin(),result.end(),source[i]);
+				if(pos == result.end()) // 确保当前元素没有出现过
+				{
+					result.push_back(source[i]);
+					dfs(source,result);
+					result.pop_back();
+				}
+				
+			}
+		}
+	}
+		
+
+public:
+    vector<vector<int> > permute(vector<int> &num) {
+		vector<int> result;
+		if(num.size() >=1)
+			dfs(num,result);
+		return results;
+
+    }
+};
+
+// 用了一个index 数组存放下标值，看是否重用过，看其他的方法，用的是 标志数组，应该比我这个更简单了一些
+
+class Solution {
+private:
+	void dfs(vector<int> &source,vector<int> &result, vector<vector<int>> &results,vector<int> &indexs)
+	{
+		if(result.size() == source.size())
+
+					results.push_back(result);
+		for(int i = 0;i < source.size();i++)
+		{
+			if(i > 0 && source[i] == source[i-1] && find(indexs.begin(),indexs.end(),i-1) == indexs.end())  // 注意这个
+				continue;
+			if(find(indexs.begin(),indexs.end(),i) == indexs.end())
+			{
+				result.push_back(source[i]);
+				indexs.push_back(i);
+				dfs(source,result,results,indexs);
+				result.pop_back();
+				indexs.pop_back();
+			}
+		}
+	}
+
+public:
+    vector<vector<int> > permuteUnique(vector<int> &num) {
+		vector<vector<int>> results;
+		vector<int> result,indexs;
+		if(num.size() > 0 )
+		{
+		    sort(num.begin(),num.end());
+		    dfs(num,result,results,indexs);
+		}
+
+		return results;
+  
+};
+用的是一个vector<bool> indexs 来吧表示对应的数是否用过了！
+
+class Solution {
+private:
+	void dfs(vector<int> &source,vector<int> &result, vector<vector<int>> &results,vector<bool>&indexs)
+	{
+		if(result.size() == source.size())
+					results.push_back(result);
+		for(int i = 0;i < source.size();i++)
+		{
+			if(i > 0 && source[i] == source[i-1] && !indexs[i-1])
+				continue;
+			if(!indexs[i])
+			{
+				result.push_back(source[i]);
+				indexs[i]= true;
+				dfs(source,result,results,indexs);
+				result.pop_back();
+				indexs[i]=false;
+			}
+		}
+	}
+
+public:
+    vector<vector<int> > permuteUnique(vector<int> &num) {
+		vector<vector<int>> results;
+		vector<int> result;
+		vector<bool> indexs(num.size(),false);
+		if(num.size() > 0 )
+		{
+			sort(num.begin(),num.end());
+			dfs(num,result,results,indexs);
+		}
+		return results;
+  
+    }
+};
