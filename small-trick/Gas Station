@@ -1,0 +1,57 @@
+// 这个方法超时了，我还乐滋滋的想出了转一圈的方法  (initial + i) % n == initial,  并且优化，又多加了个confirm 标志，结果。。
+// 忘记了转一圈的和就是是否有解的最简便判断！
+class Solution {
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+		int n = gas.size();
+		vector<bool> confirm(n,false);
+		int initial = 0;
+		int i = 1;
+		int left = 0;
+		if(n == 1)
+			return gas[0] < cost[0]? -1:0;
+		while((initial + i) % n != initial && initial < n)
+		{
+			if(gas[i] >= cost[i])
+				confirm[i] = true;
+			if(gas[i] + left < cost[i])
+			{
+				while(confirm[++initial]);
+				i = 1;
+			}
+			else
+			{
+				left = gas[i] + left - cost[i];
+				i++;
+			}
+		}
+		if(initial < n)
+			return initial;
+		else
+			return -1;
+        
+    }
+};
+
+//
+class Solution {
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+		int n = gas.size();
+		int index = -1;
+		int curSum = 0;
+		int total = 0;
+		for(int i = 0;i < n;i++)
+		{
+			curSum += gas[i]-cost[i];
+			total += gas[i] - cost[i]; // 转一圈有效也就是遍历一遍其值大于等于0！
+			if(curSum < 0)
+			{
+				index = i;
+				curSum = 0;
+			}
+		}
+		return total >= 0? index + 1: -1;
+     
+    }
+};
