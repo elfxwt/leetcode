@@ -1,0 +1,47 @@
+两个题目都是一半半的来解答，sqrt 的那个分解更加隐藏，是需要相应的数学知识来证明的
+class Solution {
+public:
+    int sqrt(int x) {
+		int left = 1,right = x / 2;// 最大到此数的一半
+		int last_mid = 0; // 来记录不能整开方的数，上一次数值就是答案
+		if(x < 2)
+			return x;
+		while(left <= right)
+		{ 
+			int mid = left + (right - left)/2;
+			if(x / mid > mid) // 为什么不能用 x > mid * mid ?  oo 明白了，相乘可能会溢出，用除比较安全
+			{
+				left =mid+ 1;
+				last_mid  = mid;
+			}
+			else
+				if(x / mid < mid)
+				{
+					right = mid -1;// 小了就已经得到值了
+				}
+				else
+					return mid;
+		}
+		return last_mid;
+    }
+};
+
+Pow
+class Solution {
+public:
+	double step(double x,int n)
+	{
+		if(n == 0)
+			return 1;
+		double v = step(x,n / 2);
+		if(n % 2 == 0)
+			return v * v;
+		else
+			return v * v * x;
+	}
+    double pow(double x, int n) {
+		if (n < 0)
+			return 1.0 / step(x,-n);
+        return step(x,n);
+    }
+};
