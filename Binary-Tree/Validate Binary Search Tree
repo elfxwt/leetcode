@@ -1,0 +1,19 @@
+// 你要把最实质的规律弄明白，就是不是简单的判断一个节点上的左右子节点的与父节点之间的大小关系，而是当左部分子树中的
+右小子树是需要满足小于上一层节点的父节点，而右部分子树中的左小子树是需要满足大于上一层节点的父母的！！所以你的递归终止
+条件是需要斟酌的！
+
+下面的代码是最优代码
+class Solution {
+	bool dfs(TreeNode *node,int lower,int upper)
+	{
+		if(node == NULL)
+			return true;
+		else
+			return node->val > lower && node->val < upper && dfs(node->left,lower,node->val) && dfs(node->right,node->val,upper);
+	
+	}
+public:
+    bool isValidBST(TreeNode *root) {
+		return dfs(root,INT_MIN,INT_MAX);		       
+    }
+};
