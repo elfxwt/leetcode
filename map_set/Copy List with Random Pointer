@@ -1,0 +1,38 @@
+// 关键是random 的处理，可以先将其新建，等next 到这个节点的时候取出新建的再复制其他相关信息 ，这个时候利用了map,可以用boost
+提供的unorder_map 更加节约时间。
+
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+		RandomListNode *newhead = new RandomListNode (0);
+		RandomListNode *q = newhead;
+		RandomListNode *p = head;
+		map<RandomListNode*,RandomListNode*> exist;
+		while(p)
+		{
+			if(exist.count(p) == 0)
+			{
+				RandomListNode* node = new RandomListNode (p->label);
+				exist[p] = node;
+			}
+			exist[p]->next = p->next;
+			if(p->random != nullptr)
+			{
+				if(exist.count(p->random) == 0)
+				{
+					RandomListNode *random = new RandomListNode(p->random->label);
+					exist[p->random] = random;
+				}
+				exist[p]->random = exist[p->random];
+			}
+			else
+				exist[p]->random = nullptr;
+			q->next = exist[p];
+			p = p->next;
+			q = q->next;
+		}
+		return newhead->next;
+
+        
+    }
+};
