@@ -1,0 +1,24 @@
+// 用ＤＰ的思路来思考的，考虑一位数和两位数之间的关系，三位与二位之间的关系，依次，找到n 与n-1之间的关系，便很容易写下下
+面的代码，注意n= 0的时候，不是空，是0
+
+
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+		vector<int> result;
+		result.push_back(0);
+		if(n > 0)
+		{
+			result.push_back(1);
+			int i = 0;
+			while(--n)
+			{
+				int length = result.size();
+				i++;
+				for(int j = length-1;j >= 0;j--)
+					result.push_back(result[j] + pow(2,i));
+			}
+		}
+		return result;     
+    }
+};
