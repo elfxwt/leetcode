@@ -1,0 +1,48 @@
+// 就是一个栈 的问题，注意输入时候是string ,涉及到switch中括号里面的c_str的转换问题，注意两个操作数计算的顺序
+
+class Solution {
+private:
+	void operate (stack<int> &value,const char* opt)
+	{
+		if(value.size() > 1)
+		{
+			int num1 = value.top();
+			value.pop();
+			int num2 = value.top();
+			value.pop();
+			switch(*opt)
+			{
+			case '+':
+				value.push(num1 + num2);
+				break;
+			case '-':
+				value.push(num2 - num1);　　// pay attention to the order
+				break;
+			case '/':
+
+				value.push(num2 / num1);
+				break;
+			case '*':
+				value.push(num1 * num2);
+				break;
+				break;
+			}
+		}
+	}
+				
+	
+public:
+    int evalRPN(vector<string> &tokens) {
+		stack<int> value;
+		for(int i = 0;i < tokens.size();i++)
+		{
+			if(tokens[i] == "+" || tokens[i] == "-"||
+				tokens[i] == "*" || tokens[i] == "/")
+				operate(value,tokens[i].c_str());
+			else
+				value.push(atoi(tokens[i].c_str()));
+		}
+		return value.top();
+        
+    }
+};
