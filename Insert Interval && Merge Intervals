@@ -37,3 +37,50 @@ public:
 		return result;
 	}		
 };
+
+class Solution {
+public:
+	static bool myfunction(const Interval a,const Interval b) // 一定要加static,，否则会报错
+	{
+		return a.start < b.start;
+	}
+    vector<Interval> merge(vector<Interval> &intervals) {
+		vector<Interval> result;
+		if(intervals.size() > 1)
+		{
+			sort(intervals.begin(),intervals.end(),myfunction);
+			bool flag = false;  // 标记是否是连续合并的
+			int tempMax = intervals[0].end;
+			for(int i = 1;i < intervals.size();i++)
+			{
+				if(tempMax < intervals[i].start)
+				{
+					if(!flag)
+						result.push_back(intervals[i-1]);
+					if(i == intervals.size()-1)
+						result.push_back(intervals[i]);
+					flag = false;
+				}
+				else
+				{
+					
+					if(flag) // 连续是可合并，看看能否合并成一个
+						{
+							result.back().end = max(tempMax,intervals[i].end);
+							tempMax = result.back().end;
+							continue;
+					} // 这里感觉可以优化。。
+					Interval *newVal = new Interval(intervals[i-1].start,max(intervals[i-1].end,intervals[i].end));
+					result.push_back(*newVal);
+					flag = true;
+				}
+				tempMax = max(intervals[i-1].end,intervals[i].end);
+			}
+		}
+		else
+			result = intervals;
+		return result;     
+    }
+};
+
+
