@@ -1,0 +1,27 @@
+  // 右旋链表，这个比右旋 数组要简单的多，可以直接摘链，右旋数组的话简便的方法是可以翻转三次即可得到，不用DP
+  
+  class Solution {
+  public:
+	  ListNode *rotateRight(ListNode *head, int k) {
+		  int length = 0;
+		  ListNode *p = head;
+		  ListNode *end =nullptr;
+		  while(p)
+		  {
+			  end = p;
+			  p = p->next;
+			  ++length;		  
+		  }
+		  p = head;
+		  int modeK = length == 0? 0:k % length;
+		  if(modeK == 0 || head == nullptr)
+			  return head;
+		  int leftK = length - modeK;
+		  while (--leftK)  // 注意一下这里
+			  p=p->next;
+		  ListNode *beginNode = p->next;
+		  p->next = nullptr;
+		  end->next = head;
+		  return beginNode;
+	  }
+  };
