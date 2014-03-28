@@ -1,0 +1,58 @@
+//递归思想很好做~注意返回空
+
+class Solution {
+	TreeNode * dfs(int start,int end,vector<int> &num)
+	{
+			if(start <= end)
+			{
+				int mid = (start + end) / 2;
+				TreeNode *newNode = new TreeNode(num[mid]);
+				newNode->left = dfs(start,mid - 1,num);
+				newNode->right = dfs(mid + 1,end,num);
+				return newNode;
+			}
+			else
+				return NULL;
+	}
+
+public:
+    TreeNode *sortedArrayToBST(vector<int> &num) {
+		if(num.size() < 1)
+			return nullptr;
+		return dfs(0,num.size()-1,num);
+        
+    }
+};
+// 自顶向下也可以做，较麻烦，下面是自下而上的来做，注意参数，
+
+  class Solution {
+  private:
+	  TreeNode *bottomToUP(ListNode *&root,int start,int end) // 注意那个地址传值
+	  {
+		  if(start <= end)
+		  {
+			  int mid = start + (end - start) / 2 ;
+			  TreeNode *leftChild = bottomToUP(root,start,mid-1);
+			  TreeNode *parent = new TreeNode(root->val);
+			  root = root->next;
+			  parent->left = leftChild;
+			  parent->right = bottomToUP(root,mid+1,end);
+			  return parent;
+		  }
+		  else 
+		    return NULL;
+	  }
+
+  public:
+	  TreeNode *sortedListToBST(ListNode *head) {
+		  ListNode *p = head;
+		  int len=0;
+		  while(p)
+		  {
+			  p = p->next;
+			  ++len;
+		  }
+		  return bottomToUP(head,0,len - 1);
+
+	  }
+  };
