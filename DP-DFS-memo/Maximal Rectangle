@@ -1,0 +1,48 @@
+// 说是ＤＰ，但是没有严格的状态转移方程，是通过‘０’和‘１’去设定的变量值，每一个元素对应的相关几个变量的设置，然后再通过
+这几个变量得到ａｒｅａ　，并记录求最大值
+  class Solution {
+  public:
+	  int maximalRectangle(vector<vector<char> > &matrix) {
+		  int n = matrix.size();
+		  int area = 0;
+		  if(n == 0 )
+			  return 0;
+		  int m = matrix[0].size();
+		  vector<int> H(m,0);
+		  vector<int> L(m,0);
+		  vector<int> R(m,m); // record the info,use this info to realize DP  
+
+		  for(int i = 0;i < n;i++)
+		  {
+			  int left = 0,right = m; // 每一行比较的两个变量
+			  for(int j = 0;j < m;j++)
+			  {
+				  if(matrix[i][j] == '1')
+				  {
+					  ++H[j]; // 对应的位置上有多少有效行
+					  L[j] = max(L[j],left); //该位置上最左边1的位置
+				  }
+				  else
+				  {
+					  left = j+1;// 与下面的right = j 对应，求得正确的距离
+					  H[j] = 0; // 若不是1对应的位置相关的记录都是初值
+					  L[j] = 0;
+					  R[j] = m;
+				  }
+			  }
+			  for( int j = m-1;j >= 0;--j)//确定最右边的值，所以从后面开始遍历
+			  {
+				  if (matrix[i][j] == '1')
+				  {
+					  R[j]=min(R[j],right);// 确定该位置最右边为1的位置
+					  area = max(area,H[j] * (R[j] - L[j])); // 累积比较
+				  }
+				  else
+					  right = j; // 这里是j 求距离的！
+
+			  }
+
+		  }
+		  return area;
+	  }
+  };
