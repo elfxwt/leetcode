@@ -1,0 +1,28 @@
+// 这个题比较难，当递归需要额外的信息来记录的时候，要学会声明全局变量，，同时返回的值注意！！
+  class Solution {
+	  int maxSum;
+	  int  dfs(TreeNode *node)
+	  {
+		  if(node == nullptr)
+			  return 0;
+		  int lsum = dfs(node->left);
+		  int rsum = dfs(node->right);
+		  int sum = node->val;
+		  if(lsum > 0)
+			  sum += lsum;
+		  if(rsum > 0)
+			  sum += rsum;
+		  maxSum = max(maxSum,sum); // 这里一个额外的全部变量去记录从左到根再到右的路径和,重要的是sum也有可能是单支上的和
+		  return max(rsum,lsum) > 0? max(rsum,lsum) + node->val: node->val; // 注意这里返回的是单只的和，
+	  }
+			  
+
+  public:
+	  int maxPathSum(TreeNode *root) {
+		  maxSum = INT_MIN; // 不能是0，可能有负值
+		  if(root == NULL)
+			  return 0;
+		  dfs(root);
+		  return maxSum;
+	  }
+  };
