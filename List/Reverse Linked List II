@@ -1,0 +1,49 @@
+ // t题目比较繁琐，但是还好没有出差错，出现了一点小的失误，但是。。时间上超标。。15分钟。。太短了，我有半个多小时了。。
+ 
+  class Solution {
+  public:
+	  ListNode *reverseBetween(ListNode *head, int m, int n) {
+		  ListNode *newHead = new ListNode(INT_MIN);
+		  newHead->next = head;
+		  ListNode * nodeM = nullptr,*preM = newHead ;
+		  ListNode * nodeN = nullptr,*postN = nullptr; 
+		  ListNode *p = head,*pre = newHead;
+		  int len = 0;
+		  while(p)
+		  {
+			  len++;
+			  if(len == m)
+			  {
+				  nodeM = p;
+				  preM = pre;
+			  }
+			  if(len == n)
+			  {
+				  nodeN = p;
+				  postN = p->next;
+				  break;
+			  }
+			  pre = p;
+			  p = p->next;
+			  
+		  }
+		 if(m < n)
+		 {
+			 p = nodeM->next;
+			 pre = nodeM;
+			 preM->next = nodeN;
+			 nodeM->next = nullptr;
+			 while (p != nodeN)
+			 {
+				 ListNode *tempNode = p->next;
+				 p->next = pre;
+				 pre = p;
+				 p = tempNode;
+			 }
+			 p->next = pre;
+			 nodeM->next = postN;
+		 }
+		 return newHead->next;
+
+	  }
+  };
