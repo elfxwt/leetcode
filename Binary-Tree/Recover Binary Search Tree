@@ -1,0 +1,77 @@
+ //  还是二叉排序树的特点，不是单纯的左子树和右子树的关系。。。
+ // 下面这个只能通过一半的用例    此题要想到中序遍历 
+  class Solution {
+  private:
+	  void swap(TreeNode *&node1,TreeNode *&node2)
+	  {
+		  int temp = node1->val;
+		  node1->val = node2->val;
+		  node2->val = temp;
+	  }
+	  int comp(TreeNode *node)
+	  {
+		  if(node->left == nullptr && node->right == nullptr)
+			  return node->val;
+		  int left = node->left == nullptr? INT_MIN: comp(node->left);
+		  int right = node->right == nullptr? INT_MAX:comp(node->right);
+		  if(left > node->val && right < node->val)  
+			  swap(node->left,node->right);
+		  else
+		  {
+			  if(left > node->val)
+			  {
+				  swap(node,node->left);
+				  comp(node->left);
+			  }
+			  if(right < node->val)
+			  {
+				  swap(node,node->right);
+				  comp(node->right);
+			  }
+		  }
+		 
+		  return node->val;
+	  }
+			  
+
+  public:
+	  void recoverTree(TreeNode *root) {
+		  if(root != nullptr)
+			  comp(root);
+	  }
+  };
+  
+  // 注意这个中序遍历写的。。没有用栈！
+    class Solution {
+	  TreeNode *p1,*p2,*pre ;
+  private:
+	
+	void dfs(TreeNode *node)  // 只是为了记录中被换序的那两个数
+	{
+		if(node == nullptr)
+			return;
+		dfs(node->left);
+		if(pre && pre->val > node->val)
+		{
+			if(p1 == nullptr)
+			{
+				p1 = pre;
+				p2 = node;
+			}
+			else
+				p2 = node;
+		}
+		pre = node;
+		dfs(node->right);
+	}
+
+  public:
+	  void recoverTree(TreeNode *root) {
+		  if(root == nullptr)
+			  return;
+		  p1 = p2 = pre = nullptr;
+		  dfs(root);
+		  swap(p1->val,p2->val);
+		
+	  }
+  };
