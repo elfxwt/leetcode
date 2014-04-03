@@ -1,0 +1,52 @@
+// 就是在广搜的基础上，同时带上高度，不难做，稍微繁琐了一点，自己的代码有提高的空间
+
+ class Solution {
+  public:
+	  vector<vector<int> > zigzagLevelOrder(TreeNode *root) {
+		  vector<vector<int>> results;
+		  vector<int> result;
+		  if (root)
+		  {
+			  queue<TreeNode *> cur,next;
+			  int level = 0;
+			  cur.push(root);
+			  result.push_back(root->val);
+			  results.push_back(result);
+			  result.clear();
+			  while(!cur.empty())
+			  {
+				  while (!cur.empty())
+				  {
+					  TreeNode *tempNode = cur.front();
+					  cur.pop();
+					  if(tempNode->left)
+					  {
+						  next.push(tempNode->left);
+						  result.push_back(tempNode->left->val);
+					  }
+					  if(tempNode->right)
+						{  
+							next.push(tempNode->right);
+							result.push_back(tempNode->right->val);
+					  }
+
+				  }
+				  level++;
+				  if(result.size() > 0)
+				  {
+					  if(level % 2 == 0)
+						  results.push_back(result);
+					  else
+					  {
+						  reverse(result.begin(),result.end());
+						  results.push_back(result);
+					  }
+					  result.clear();
+					  swap(cur,next);
+				  }
+				 
+			  }
+		  }
+		  return results;
+	  }
+  };
