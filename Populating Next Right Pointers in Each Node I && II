@@ -1,0 +1,69 @@
+// 利用广搜的思路是可以秒杀的，再次复习了树的层次遍历，但是题目要求你constant space ,这个时候就需要换思路了
+// 总体来说就是要用两个指针，指明上一层和下层的开始
+// 广搜的代码
+  class Solution {
+  public:
+	  void connect(TreeLinkNode *root) {
+		  queue<TreeLinkNode *> current, next;
+		  if(root == nullptr)
+			  return;
+	      current.push(root);
+		  while (!current.empty())
+		  {
+			  while(!current.empty())  // 这里为什么要两次判空！
+			  {
+				  TreeLinkNode *tempNode = current.front();
+				  current.pop();
+				  if(tempNode->left != nullptr)
+					  next.push(tempNode->left);
+				  if(tempNode->right != nullptr)
+					  next.push(tempNode->right);
+			  }
+			  if(!next.empty())
+			  {
+				  TreeLinkNode *node = next.front();
+				  current.push(node);
+				  next.pop();
+				  while(!next.empty())
+				  {
+					  node->next = next.front();
+					  node = next.front();
+					  current.push(node);
+					  next.pop();
+				  }
+			  }
+		  }
+	  }
+  };
+  
+ // 利用两个指针的迭代版 
+  
+  
+  class Solution {
+  public:
+	  void connect(TreeLinkNode *root) {
+		  while (root)
+		  {
+			  TreeLinkNode *nextLevel = nullptr;
+			  TreeLinkNode * preNode = nullptr;
+			  for (;root;root= root->next)
+			  {
+				  if(!nextLevel) // 这个条件很关键，每次一层结束之后再赋值！
+					  nextLevel = root->left? root->left : root->right;
+				  if(root->left != nullptr)
+				  {
+					  if(preNode)
+						preNode->next = root->left;
+					  preNode = root->left;
+				  }
+				  if(root->right)
+				  {
+					  if (preNode)
+						preNode->next = root->right;
+					  preNode = root->right;
+				  }	  
+			  }
+			  root = nextLevel;			  
+		  }		  
+	  }
+  };
