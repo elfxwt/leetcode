@@ -1,0 +1,62 @@
+// 这种走迷宫之类的棋盘问题，若是要按个去试，就是NP问题，时间复杂度很大，N！，一般是采用深搜来解决
+// 难点往往是细节上的实现，如收敛条件和终止条件的确认，进行下一步的条件判断等
+// 这里存在的难点就是判断下一步皇后的存放，其实也很简单，就是对角线和行的判断，有两种方式
+  class Solution {
+  private:
+	  vector<int> columns;
+	  vector<int> principle_diagonals;
+	  vector<int> counter_diagonals;
+	  void dfs(int row,vector<int> &queen_col,vector<vector<string>> &results)
+	  {
+		  const int rows = queen_col.size();
+		  if(row == rows)
+		  {
+			  vector<string> result;//一个答案
+			  for(int i = 0;i < rows;i++) 
+			  {
+				  string solu(rows,'.');// n 个 string,答案中的每一行
+			      solu[queen_col[i]] = 'Q'; // 如果按个去找，time limited 
+				  result.push_back(solu);
+			  }
+			  results.push_back(result);
+			  return;
+		  }
+		  for(int j = 0;j < rows;j++)  // 每一行去检查搜索
+		  {
+			  if(columns[j] == 0 &&principle_diagonals[row + j] == 0 && 
+				  counter_diagonals[row - j + rows] == 0) // 对角线上的判断为什么是这样判断的。。？？
+			  {
+				  queen_col[row] = j;// 满足条件，将该行上的queen 列号存储
+				  columns[j] = principle_diagonals[row + j] = counter_diagonals[row - j + rows] = 1;// 相应条件设置
+				  dfs(row + 1,queen_col,results); // 下一行 ，深搜的标志体现
+				  queen_col[row] = 0; // 撤销动作
+				  columns[j] = principle_diagonals[row + j] = counter_diagonals[row -j + rows] = 0;
+			  }
+		  }
+	  }
+
+  public:
+	  vector<vector<string> > solveNQueens(int n) {
+		  this->columns = vector<int> (n,0); // 当前列是否有皇后
+		  this->principle_diagonals = vector<int> (2*n,0); // 主对角线上的
+		  this->counter_diagonals = vector<int> (2*n,0);
+		  vector<int> row_col(n,0);
+		  vector<vector<string>> results;
+		  dfs(0,row_col,results);
+		  return results;
+	  }
+  };
+  
+  
+// 两种方法判断对角线，充分体现了空间换时间的思路
+private boolean check(int row, int[] columnForRow)  
+{  
+    for(int i=0;i<row;i++)  
+    {  
+        if(columnForRow[row]==columnForRow[i] || Math.abs(columnForRow[row]-columnForRow[i])==row-i)  //行列差的相等=》对角线
+            return false;  
+    }  
+    return true;  
+} 
+
+// N皇后II的问题就是设置一个全局变量，找到一个解就加1,
