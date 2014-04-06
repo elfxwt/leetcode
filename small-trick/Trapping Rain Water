@@ -1,0 +1,25 @@
+  // 找出最大值，右边和左边单独处理！
+  
+  class Solution {
+  public:
+	  int trap(int A[], int n) {
+		  int maxIndex = 0;
+		  for(int i = 0;i < n;i++)
+			  if(A[i] > A[maxIndex])
+				  maxIndex = i;
+		  int leftMax = 0,rightMax = 0,aera = 0;
+		  for(int i = 0;i < maxIndex;i++)
+		  {
+			  if(A[i] > leftMax)
+				  leftMax = A[i];
+			  aera += leftMax - A[i];
+		  }
+		  for(int j = n-1;j > maxIndex ;--j) // 中间就是靠山，从右边也是要按照中间是最后的思路来
+		  {
+			  if(A[j] > rightMax)
+				  rightMax = A[j];
+			  aera += rightMax - A[j];
+		  }
+		  return aera;
+	  }
+  };
