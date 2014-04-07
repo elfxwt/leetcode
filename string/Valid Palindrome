@@ -1,0 +1,38 @@
+// 想要学会 isalnum 的用法，但是。。 
+ 
+  class Solution {
+  private:
+	  int checkAlpha(char c)
+	  {
+		  if(c >= '0' && c <='9')
+			  return c;
+		  if(c >= 'A' &&c <= 'Z' )
+			  return c - 'A';
+		  if(c >= 'a' && c <= 'z')
+			  return c - 'a';
+		  return -1;
+	  }
+
+  public:
+	  bool isPalindrome(string s) {
+		  for(int i = 0,j = s.size() - 1; j - i >= 1;)
+		  {
+			  int valueA = checkAlpha(s[i]);
+			  int valueB = checkAlpha(s[j]);
+			  if (valueA == valueB)
+			  {				  
+					  ++i;--j;
+			  }
+			  else
+			  {
+				  if(valueA >= 0 &valueB >= 0)
+					  return false;
+				  else
+					  if(valueA <0)  ++i;
+					  else
+						  if(valueB < 0)  --j;
+			  }
+		  }
+		  return true;
+	  }
+  };
