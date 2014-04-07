@@ -1,0 +1,34 @@
+  // g关键是要知道unix的路径知识，然后就是栈的数据结构
+  
+  class Solution {
+  public:
+	  string simplifyPath(string path) {
+		  string result;
+		  vector<string> dirs;// 这里不用真正的栈是因为最后输出还是从前到后的
+		  for (auto iter = path.begin();iter != path.end();/*++iter*/)
+		  {
+			  ++iter;// 从第二个开始，因为第一个肯定是/
+			  auto pos = find(iter,path.end(),'/');// 用这个返回的是iterator ,用 string.find() 返回的是size_t
+			  string dir = string(iter,pos);// 字符串构造方式,[first,last) 当first= last，dir =""
+			  if (!dir.empty() && dir != ".")
+			  {
+				  if(dir == "..")
+				  {
+					  if(!dirs.empty())
+						  dirs.pop_back();
+				  }
+				  else
+					  dirs.push_back(dir);
+			  }
+			  iter = pos;// 这里iter 有个赋值，所以要先判断条件，而不能直接iter++
+		  }
+		  if(dirs.empty())
+			  result = "/";
+		  else
+		  {
+			for(auto s:dirs)
+				result += "/" + s;
+		  }
+		  return result;
+	  }
+  };
