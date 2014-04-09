@@ -1,0 +1,23 @@
+就只想到 广度遍历，然后检查每一层上的节点。。甚至是要回文似的判断，其实思维再转一下，其关键是镜子效应，left->left == right->right
+和 left->right == right->left  所以以此为小分支递归下去，同样也可以以这样的顺序存放在栈中，直接判断相等后再将相应的节点存入
+关于二叉树的灵活应用
+
+class Solution {
+  private:
+	  bool leftRight(TreeNode *left,TreeNode *right)
+	  {
+		  if(!left && !right)
+			  return true;
+		  if(!left || !right)
+			  return false;
+		  if(left->val != right ->val)
+			  return false;
+		  return leftRight(left->left,right->right) && leftRight(left->right,right->left);
+	  }
+
+  public:
+	  bool isSymmetric(TreeNode *root) {
+		  return root == nullptr? true: leftRight(root->left,root->right);
+		  
+	  }
+  };
