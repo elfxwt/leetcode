@@ -1,0 +1,65 @@
+//  自己写的一个链表，以time limited  告终，同时里面的一些逻辑还不是很正确
+1） 对于相同key的catch 如何处理的：更新对应的值
+2） 只要get 就相当于 最近一次的访问，要将节点提前
+  class LRUCache{
+  private:
+	  struct CatchNode{
+		  int key;
+		  int value;
+		  CatchNode *next;
+		  CatchNode (int x,int y):key(x),value(y),next(NULL){};// 初始化列表
+	  };
+	  CatchNode *head;
+public:
+    LRUCache(int capacity) {
+        head = new CatchNode(capacity,0);// 头结点存放容量和当前长度；
+
+    }
+    
+    int get(int key) {       // 当有相同的key 取哪个呢？从经常使用的开始查找,错了，是进行更新然后作为最近使用的节点
+		CatchNode *p = head,*pre = head,*temp = head->next;	
+		int curLen = head->value;
+		while(curLen--)
+		{
+			pre = p;
+			p=p->next;
+			if(p && p->key == key) // 这里要判断p 是否为null
+				{
+					pre = p->next; // 
+					head->next = p;
+					p->next = temp;
+					return p->value;
+			}
+		}
+		return -1;
+        
+    }
+    
+    void set(int key, int value) {
+		CatchNode *p = head;
+		CatchNode *newCatch = new CatchNode(key,value);
+		int curLen = head->value;
+		/*while(curLen --)
+			{
+				p=p->next;
+				if(p->key == key)
+					return;
+			}*/  // 不要往后面插入，往前面插，用头插法。越靠近头结点越是最近使用的
+		CatchNode *temp = p->next;		
+		p->next = newCatch;
+		newCatch->next = temp;
+		if(curLen < head->key)
+			head->value += 1;
+		else
+		{
+			CatchNode *pre = p;
+			while(curLen --)
+			{
+				pre = p;
+				p = p->next;
+			}
+			pre->next = NULL;
+		}
+	
+    }
+};
