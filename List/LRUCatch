@@ -63,3 +63,53 @@ public:
 	
     }
 };
+
+ // 用了一个双向链表list ,一个 unorder_map辅助空间，实现了LRUCatch 原理，唯一复杂的的是当进行改变的时候要两者同时改变
+ 
+   class LRUCache{
+  private:
+	  struct CatchNode{
+		  int key;
+		  int value;
+		  CatchNode (int x,int y):key(x),value(y){};// 初始化列表
+	  };
+	  list<CatchNode> catchList; // 双向链表存放catch
+	  unordered_map <int, list<CatchNode>::iterator> mapCatch; // 辅助空间查找节点对应的地址，从而不需要进行遍历
+	  int capacity;
+public:
+    LRUCache(int capacity) {
+		this->capacity = capacity;
+
+    }
+    
+    int get(int key) {       // 当有相同的key 取哪个呢？从经常使用的开始查找,错了，不会有相同的key存在的是进行更新然后作为最近使用的节点
+		if(mapCatch.find(key) == mapCatch.end())
+			return -1;
+		catchList.splice(catchList.begin(),catchList,mapCatch[key]); // splice 的使用，可以进行自我迁移的！
+		mapCatch[key] = catchList.begin();
+		return catchList.begin()->value;
+       
+    }
+    
+    void set(int key, int value) {
+		if(mapCatch.find(key) == mapCatch.end())
+		{
+			if(catchList.size() == capacity)
+			{
+				mapCatch.erase(catchList.back().key); // 把对应的map中的地址也要消除
+				catchList.pop_back();
+			}
+			CatchNode *newNode = new CatchNode(key,value);
+			catchList.push_front(*newNode);
+			mapCatch[key] = catchList.begin();
+			
+		}
+		else
+		{
+			mapCatch[key]->value = value;
+			catchList.splice(catchList.begin(),catchList,mapCatch[key]);
+			mapCatch[key] = catchList.begin();
+		}
+    }
+};
+
