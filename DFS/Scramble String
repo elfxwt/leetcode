@@ -1,0 +1,32 @@
+  // 本来这道题目说是用三维ＤＰ，当场吓尿了有没有啊。。结果，发现其实很简单的递归两部分比较，就可以达到了！！最主要是
+  分割了之后，进行比较，然后交换字母的，可以交叉比较！这个地方想不清楚，
+  
+  class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+		if(s1 == s2)
+			return true;
+		if(s1.length() != s2.length())
+			return false;
+		string t1(s1),t2(s2);
+		sort(t1.begin(),t1.end());
+		sort(t2.begin(),t2.end());
+		if(t1 != t2)
+			return false;
+		int len = s1.length();
+		for(int i = 1;i < len;i++)
+		{
+			string s1left = s1.substr(0,i);
+			string s1right = s1.substr(i);
+			string s2left = s2.substr(0,i);
+			string s2right = s2.substr(i);
+			if(isScramble(s1left,s2left) && isScramble(s1right,s2right))  // dfs 
+				return true;
+			s2left = s2.substr(0,len - i);
+			s2right = s2.substr(len - i);
+			if(isScramble(s1left,s2right) && isScramble(s1right,s2left))  // 交叉递归
+				return true;
+		}
+		return false;
+    }
+};
