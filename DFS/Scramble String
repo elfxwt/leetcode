@@ -23,8 +23,8 @@ public:
 			if(isScramble(s1left,s2left) && isScramble(s1right,s2right))  // dfs 
 				return true;
 			s2left = s2.substr(0,len - i);
-			s2right = s2.substr(len - i);
-			if(isScramble(s1left,s2right) && isScramble(s1right,s2left))  // 交叉递归
+			s2right = s2.substr(len - i);   // 这里要想清楚，为什么是len-i,当交换的不是两个而是不同个数的时候。
+			if(isScramble(s1left,s2right) && isSzcramble(s1right,s2left))  // 交叉递归
 				return true;
 		}
 		return false;
