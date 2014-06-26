@@ -1,0 +1,104 @@
+
+class Solution {
+public:
+    string minWindow(string S, string T) {
+		int lens = S.size(),lent = T.size();
+		int srcT[128];              // 很多都采用256,其实ascii 码有效位数是7位，所以不必开那么大
+		int srcS[128];
+		fill(srcT,srcT + 128,0);  // fill 与memset的使用，感觉fill更强大，memset要计算空间大小
+		fill(srcS,srcS + 128,0);
+		int foundS[128];
+		int foundLen = 0;
+		int start = 0,end = lens;
+		int tstart = 0,tend = 0;
+		for(int i = 0;i < lent;i++)
+			srcT[T[i]] ++;
+		for(int i = 0;i < lens;i++)
+		{
+			if(srcT[S[i]] != 0)
+			{
+				srcS[S[i]]++;
+				if(srcS[S[i]] <= srcT[S[i]]) foundLen++;
+				if(foundLen == lent)
+				{
+					tend = i;
+					while(srcT[S[tstart]] == 0 || srcS[S[tstart]] > srcT[S[tstart]])  // start 要往后缩减的过程，比较重要，可优化
+					{
+						
+						if(srcT[S[tstart]] != 0)
+							srcS[S[tstart]]--;
+						tstart ++;
+					}
+					if(end - start > tend - tstart )
+					{
+						end = tend;
+						start = tstart;
+					}
+					srcS[S[tstart]]--;
+					foundLen--;
+					tstart ++;
+				}
+			}
+		}
+		if(end == lens)
+			return "";
+		else
+			return S.substr(start,end - start + 1);
+     
+    }
+};
+
+
+
+
+
+class Solution {
+public:
+    string minWindow(string S, string T) {
+		int lens = S.size(),lent = T.size();
+		int srcT[128];
+		int srcS[128];
+		fill(srcT,srcT + 128,0);
+		fill(srcS,srcS + 128,0);
+		queue<int> index;
+		int foundS[128];
+		int foundLen = 0;
+		int start = 0,end = lens;
+		int tstart = 0,tend = 0;
+		for(int i = 0;i < lent;i++)
+			srcT[T[i]] ++;
+		for(int i = 0;i < lens;i++)
+		{
+			if(srcT[S[i]] != 0)
+			{
+				index.push(i);
+				srcS[S[i]]++;
+				if(srcS[S[i]] <= srcT[S[i]]) foundLen++;
+				if(foundLen == lent)
+				{
+					tend = i;
+					tstart = index.front();
+					while(srcS[S[tstart]]>srcT[S[tstart]]) // 建立了一个队列，每次都只从有效的字母开始。时间缩减了三分之一。
+					{
+						index.pop();
+						srcS[S[tstart]]--;
+						tstart = index.front();			
+					}
+					if(end - start > tend - tstart )
+					{
+						end = tend;
+						start = tstart;
+					}
+					srcS[S[tstart]]--;
+					foundLen--;
+					index.pop();  // 与srcS要保持一致
+				}
+			}
+		}
+		if(end == lens)
+			return "";
+		else
+			return S.substr(start,end - start + 1);
+     
+    }
+};
