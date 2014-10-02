@@ -1,0 +1,27 @@
+//最普通的DP？怎么又不会DP了，这么简短的DP和思想，瞬间吓尿了有没有。。这差距。。。
+
+
+
+
+
+// 循环的过程中记录最大值和最小值！！
+
+
+
+
+class Solution {
+public:
+    int maxProduct(int A[], int n) {
+		int result = A[0], midMin = A[0],midMax = A[0];
+		for(int i = 1;i < n;i++)
+		{
+			int a = min(midMin * A[i],midMax * A[i]);// 这样的比较保证值为连续的！
+			int b = max(midMin * A[i],midMax * A[i]); 
+			midMin = min(a,A[i]);// 最小的数也要记录，这样就可以在后面再遇到负数的时候变成最大的。
+			midMax = max(b,A[i]);
+			result = max(midMax,result);
+		}
+		return result;
+        
+    }
+};
