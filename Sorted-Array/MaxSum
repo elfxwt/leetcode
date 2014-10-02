@@ -1,0 +1,30 @@
+// 把题目读错了，人家求连续的（contiguous)的乘积，我TMD的算成了求和，一个array里面subarray和最大的，O（n）的思路如下： 
+
+class Solution {
+public:
+    int maxProduct(int A[], int n) {
+		int sum = 0;
+		int curMax = 0, temMax = 0;
+		bool flag = true;
+		for(int i = 0;i < n;i++)
+		{
+			if(flag)
+			{
+				if(temMax + A[i] >= temMax)
+					temMax = temMax + A[i];
+				else
+				{
+					flag = false;
+					curMax = max(temMax,curMax);
+				}
+			}
+			else
+			{
+				flag = true;
+				temMax = A[i];
+			}
+		}
+		return curMax;
+        
+    }
+};
